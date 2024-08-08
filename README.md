@@ -4,12 +4,12 @@
 
 # 일기 기반 노래 제공 서비스, InsideOutDJ🥳
 
-<img src="https://media.npr.org/assets/img/2015/06/12/inside-out_wide-b3c80d021b0d7fa62cd600f9d17fb8e52c40d3e3.jpg", height="100x", width="100px">
+![InsideOutDJ](https://media.npr.org/assets/img/2015/06/12/inside-out_wide-b3c80d021b0d7fa62cd600f9d17fb8e52c40d3e3.jpg)
 
 <div align="center">
 <h3>25기 YBIGTA 신입기수 프로젝트</h3>
 
-<em> 일기 기반 노래 제공 서비스, InsideOutDJ🥳 </em>
+<em> 일기 기반 노래 제공 서비스, InsideOutDJ🥳 입니다.</em>
 
 ## 👥 팀 구성
 
