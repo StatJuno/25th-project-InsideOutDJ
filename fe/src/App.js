@@ -21,6 +21,7 @@ function App() {
   const [pliKey, setPliKey] = useState("");
   const [pliName, setPliName] = useState("");
   const [playlists, setPlaylists] = useState([]);
+  const [isPlaying, setIsPlaying] = useState(false);
 
   // useEffect 내부에서 상태를 사용
   useEffect(() => {
@@ -104,6 +105,7 @@ function App() {
   };
   const playerProps = {
     player,
+    isPlaying,
     togglePlayPause: async () => {
       if (!player) return;
       const state = await player.getCurrentState();
@@ -115,10 +117,12 @@ function App() {
       if (state.paused) {
         player.resume().then(() => {
           console.log("음악이 재생되었습니다.");
+          setIsPlaying(true);
         });
       } else {
         player.pause().then(() => {
           console.log("음악이 일시 중지되었습니다.");
+          setIsPlaying(false);
         });
       }
     },

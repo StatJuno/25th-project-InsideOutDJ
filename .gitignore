@@ -9,10 +9,10 @@ fe/.pnp
 fe/.pnp.js
 
 # testing
-fe//coverage
+fe/coverage
 
 # production
-fe//build
+fe/build
 
 # misc
 fe/.DS_Store
