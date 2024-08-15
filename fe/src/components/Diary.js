@@ -19,11 +19,12 @@ const DiaryText = tw.textarea`
 
 function Diary({ onCreatePlaylist }) {
   const [diary, setDiary] = useState("");
+  const [title, setTitle] = useState("");
   const navigate = useNavigate();
 
   const handleDiarySubmit = async () => {
     //여기에서 fastAPI와 통신
-    await onCreatePlaylist(diary);
+    await onCreatePlaylist(diary, title);
     navigate("/loading");
   };
 
@@ -31,6 +32,11 @@ function Diary({ onCreatePlaylist }) {
     <OutBox>
       <HowAbout>오늘 하루는 어땠나요?</HowAbout>
       <OutBox>
+        <input
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          placeholder="제목"
+        ></input>
         <DiaryText
           value={diary}
           onChange={(e) => setDiary(e.target.value)}

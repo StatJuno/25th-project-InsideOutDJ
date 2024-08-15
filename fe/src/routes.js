@@ -1,14 +1,11 @@
-// src/routes.js
-
 import React from "react";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-
-import Diary from "./components/Diary";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Login from "./components/Login";
+import Diary from "./components/Diary";
 import Loading from "./components/Loading";
 import Player from "./components/Player";
 
-function AppRoutes({ playerProps, authProps }) {
+function AppRoutes({ playerProps, authProps, loadingProps }) {
   return (
     <Router>
       <Routes>
@@ -17,7 +14,8 @@ function AppRoutes({ playerProps, authProps }) {
           path="/diary"
           element={<Diary onCreatePlaylist={playerProps.onCreatePlaylist} />}
         />
-        <Route path="/loading" element={<Loading />} />
+        <Route path="/loading" element={<Loading {...playerProps} />} />
+        {/* loadingProps 전달 */}
         <Route path="/player" element={<Player {...playerProps} />} />
       </Routes>
     </Router>
