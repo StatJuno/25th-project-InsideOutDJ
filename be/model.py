@@ -24,7 +24,9 @@ tokenizer = BertTokenizer.from_pretrained('monologg/kobert')
 model = BertForSequenceClassification.from_pretrained('monologg/kobert', num_labels=5)
 # 모델의 가중치 로드 (CPU로 매핑)
 loaded_data = torch.load('./kobert_emotion_model.pth', map_location=torch.device('cpu'))
-model.load_state_dict(loaded_data['model_state_dict'], strict=False)
+# print(loaded_data.keys())
+# model.load_state_dict(loaded_data['model_state_dict'], strict=False)
+model.load_state_dict(loaded_data, strict=False)
 
 device = torch.device('cpu')
 model.to(device)
@@ -44,6 +46,15 @@ nltk.download('punkt')
 def split_sentences(paragraph):
     sentences = kss.split_sentences(paragraph)
     return sentences
+# import re
+
+# def split_sentences(paragraph):
+#     # 정규 표현식을 사용하여 문장을 구분합니다.
+#     # 이 예제에서는 기본적인 마침표, 느낌표, 물음표를 기준으로 문장을 나눕니다.
+#     sentence_endings = re.compile(r'(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\?|\!)\s')
+#     sentences = sentence_endings.split(paragraph.strip())
+
+#     return [sentence.strip() for sentence in sentences]
 
 # 레이블을 좌표로 매핑
 label_to_emotion_vector = {
@@ -153,7 +164,7 @@ def get_songs_by_emotion_and_intensity(df, normalized_emotion):
 matching_songs = get_songs_by_emotion_and_intensity(df, normalized_emotion)
 
 # 결과 확인
-print(matching_songs)
+print("매칭",matching_songs)
 
 import numpy as np
 from sklearn.metrics.pairwise import cosine_similarity
@@ -197,8 +208,8 @@ matching_songs['similarity'] = matching_songs['keyword_embedding'].apply(lambda 
 
 # 유사도 상위 5개 노래 선택
 top_5_songs = matching_songs.sort_values(by='similarity', ascending=False).head(5)
-
-print(top_5_songs[['track_name', 'artist_name']])
+print(top_5_songs.columns)
+print(top_5_songs[['track_name', 'artist_name','uri']])
 
 # 결과를 지정된 디렉토리에 JSON 파일로 저장
 output_path = r'C:\Users\gu051\1workspace1\신기플\top_5_songs.json'

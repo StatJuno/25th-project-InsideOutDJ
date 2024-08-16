@@ -24,3 +24,13 @@ fe/.env.production.local
 fe/npm-debug.log*
 fe/yarn-debug.log*
 fe/yarn-error.log*
+
+
+be/.DS_Store
+be/myenv
+be/__pycache__
+
+be/tracks_final.csv
+be/kobert_emotion_model.pth
+
+

@@ -225,6 +225,28 @@ function App() {
     onCreatePlaylist: async (diary, title) => {
       const playlistName = `${title} - ${new Date().toLocaleDateString()}`;
       try {
+        // FastAPI 서버에 다이어리 데이터를 전송하여 추천된 노래 목록을 받아옴
+        const response = await axios.post(
+          "http://localhost:8000/generate_playlist",
+          diary, // diary 문자열을 직접 전송
+          {
+            headers: {
+              "Content-Type": "text/plain", // Content-Type을 text/plain으로 설정
+            },
+          }
+        );
+
+        // 추천된 노래 목록과 감정 분석 데이터를 추출
+        const recommendedSongs =
+          response.data.recommended_songs.recommended_songs;
+        const emotionAnalysis =
+          response.data.recommended_songs.emotion_analysis;
+
+        console.log("Emotion Analysis:", emotionAnalysis);
+
+        const uris = recommendedSongs.map((song) => song.uri);
+
+        // Spotify 사용자 ID를 가져옴
         const userResponse = await axios.get("https://api.spotify.com/v1/me", {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -233,7 +255,7 @@ function App() {
 
         const userId = userResponse.data.id;
 
-        // 플레이리스트 생성
+        // Spotify에서 플레이리스트 생성
         const playlistResponse = await axios.post(
           `https://api.spotify.com/v1/users/${userId}/playlists`,
           {
@@ -253,12 +275,6 @@ function App() {
         setPliKey(newPliKey);
         setPliName(playlistResponse.data.name);
 
-        // 예시 데이터
-        const uri_base = "spotify:track:";
-        const uris = ["2rOA9vEsnpNB6L5XgmibKn", "3PGK6qlEztoGlpJoW603YA"].map(
-          (i) => `${uri_base}${i}`
-        );
-
         // 생성된 플레이리스트에 트랙 추가
         await axios.post(
           `https://api.spotify.com/v1/playlists/${newPliKey}/tracks`,
@@ -273,6 +289,63 @@ function App() {
             },
           }
         );
+
+        console.log("Playlist created successfully!");
+        //   } catch (error) {
+        //     console.error("Error creating playlist:", error);
+        //   }
+        // };
+        // onCreatePlaylist: async (diary, title) => {
+        //   const playlistName = `${title} - ${new Date().toLocaleDateString()}`;
+        //   try {
+        //     const userResponse = await axios.get("https://api.spotify.com/v1/me", {
+        //       headers: {
+        //         Authorization: `Bearer ${token}`,
+        //       },
+        //     });
+
+        //     const userId = userResponse.data.id;
+
+        //     // 플레이리스트 생성
+        //     const playlistResponse = await axios.post(
+        //       `https://api.spotify.com/v1/users/${userId}/playlists`,
+        //       {
+        //         name: playlistName,
+        //         description: "Playlist created based on diary entry",
+        //         public: false,
+        //       },
+        //       {
+        //         headers: {
+        //           Authorization: `Bearer ${token}`,
+        //           "Content-Type": "application/json",
+        //         },
+        //       }
+        //     );
+
+        //     const newPliKey = playlistResponse.data.id; // 생성된 플레이리스트의 ID
+        //     setPliKey(newPliKey);
+        //     setPliName(playlistResponse.data.name);
+
+        //     // 예시 데이터
+        //     const uri_base = "spotify:track:";
+        //     const uris = ["2rOA9vEsnpNB6L5XgmibKn", "3PGK6qlEztoGlpJoW603YA"].map(
+        //       (i) => `${uri_base}${i}`
+        //     );
+
+        //     // 생성된 플레이리스트에 트랙 추가
+        //     await axios.post(
+        //       `https://api.spotify.com/v1/playlists/${newPliKey}/tracks`,
+        //       {
+        //         uris: uris,
+        //         position: 0,
+        //       },
+        //       {
+        //         headers: {
+        //           Authorization: `Bearer ${token}`,
+        //           "Content-Type": "application/json",
+        //         },
+        //       }
+        //     );
         // await axios.put(
         //   "https://api.spotify.com/v1/me/player/play",
         //   {

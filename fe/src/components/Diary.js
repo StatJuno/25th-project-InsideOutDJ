@@ -23,8 +23,8 @@ function Diary({ onCreatePlaylist }) {
   const navigate = useNavigate();
 
   const handleDiarySubmit = async () => {
-    //여기에서 fastAPI와 통신
-    await onCreatePlaylist(diary, title);
+    const cleanedDiary = diary.replace(/\n/g, " ");
+    await onCreatePlaylist(cleanedDiary, title);
     navigate("/loading");
   };
 
