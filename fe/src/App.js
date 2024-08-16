@@ -12,7 +12,7 @@ function App() {
     "user-modify-playback-state",
     "user-read-playback-state",
     "user-read-currently-playing",
-    "streaming",
+    "streaming"
   ].join(" ");
 
   const [token, setToken] = useState("");
@@ -22,6 +22,8 @@ function App() {
   const [pliName, setPliName] = useState("");
   const [playlists, setPlaylists] = useState([]);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [currentTime, setCurrentTime] = useState(0);
+  const [duration, setDuration] = useState(0);
 
   // 유저 토큰 받아오기
   // navigate 정의
@@ -40,6 +42,8 @@ function App() {
       window.localStorage.setItem("token", token);
     }
     setToken(token);
+
+    
   }, []);
 
   //SDK 로딩
@@ -60,7 +64,7 @@ function App() {
         console.log("Spotify Web Playback SDK is ready");
         if (token) {
           const playerInstance = new window.Spotify.Player({
-            name: "Web Playback SDK Player",
+            name: "InsideOutDJ Webplayer",
             getOAuthToken: (cb) => {
               cb(token);
             },
@@ -79,7 +83,13 @@ function App() {
 
           playerInstance.addListener("player_state_changed", (state) => {
             console.log(state);
+            if (!state) {
+              return;
+            }
+
             setIsPlaying(!state.paused);
+            setCurrentTime(state.position / 1000);
+            setDuration(state.duration / 1000);
           });
 
           playerInstance.connect().then((success) => {
@@ -293,6 +303,19 @@ function App() {
       }
     },
     pliKey,
+    seekTo: (progress) => {
+      const newTime = progress * duration;
+      player.seek(newTime * 1000).then(() => {
+        console.log(`재생시간 ${newTime}로 설정되었습니다.`);
+      });
+      setCurrentTime(newTime);
+    },
+    getPlaytime: () => {
+      return currentTime;
+    },
+    getDuration: () => {
+      return duration;
+    }
   };
   return <AppRoutes playerProps={playerProps} authProps={authProps} />;
 }

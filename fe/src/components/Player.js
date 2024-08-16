@@ -25,6 +25,16 @@ const Slider = tw.input`
   opacity-100
 `;
 
+const SeekSlider = tw.input`
+  appearance-none
+  w-full
+  h-1
+  bg-gray-300
+  rounded-lg
+  cursor-pointer
+  accent-blue-500
+`;
+
 function Player({
   togglePlayPause,
   skipToNext,
@@ -34,6 +44,8 @@ function Player({
   playPlaylist,
   pliName,
   isPlaying,
+  seekTo,
+  getPlaytime
 }) {
   return (
     <OutBox>
@@ -134,6 +146,18 @@ function Player({
             {playlists.map((track) => (
               <div key={track.track.id}>{track.track.name}</div>
             ))}
+          </div>
+          <div class="m-2">
+            <SeekSlider class="w-full"
+                  type="range"
+                  min="0"
+                  max="1"
+                  step="0.01"
+                  onChange={(e) => {
+                    const progress = e.target.value;
+                    seekTo(progress);
+                  }}
+                />
           </div>
         </div>
       </Ball>
