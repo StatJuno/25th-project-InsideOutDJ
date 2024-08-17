@@ -81,7 +81,7 @@ function Player({
       clearInterval(interval);
     }
     return () => clearInterval(interval);
-  }, [isPlaying, currentTime]);
+  }, [isPlaying, currentTime, skipToNext, skipToPrevious]);
 
   const formatTime = (seconds) => {
     const minutes = Math.floor(seconds / 60);
