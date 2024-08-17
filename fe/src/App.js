@@ -237,7 +237,7 @@ function App() {
         alert("플레이리스트 재생 중 오류가 발생했습니다.");
       }
     },
-    pliName: pliName,
+    pliName,
     onCreatePlaylist: async (diary, title) => {
       const playlistName = `${title} - ${new Date().toLocaleDateString()}`;
       try {
