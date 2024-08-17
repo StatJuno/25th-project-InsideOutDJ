@@ -21,6 +21,7 @@ function App() {
   const [pliKey, setPliKey] = useState("");
   const [pliName, setPliName] = useState("");
   const [playlists, setPlaylists] = useState([]);
+  const [track, setTrack] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
@@ -42,8 +43,6 @@ function App() {
       window.localStorage.setItem("token", token);
     }
     setToken(token);
-
-    
   }, []);
 
   //SDK 로딩
@@ -90,6 +89,13 @@ function App() {
             setIsPlaying(!state.paused);
             setCurrentTime(state.position / 1000);
             setDuration(state.duration / 1000);
+
+            const currentTrack = state.track_window.current_track;
+            setTrack({
+              name: currentTrack.name,
+              artists: currentTrack.artists.map(artist => artist.name).join(', '),
+              album: currentTrack.album.images.map((image) => image.url) // Get the cover image URL
+            });
           });
 
           playerInstance.connect().then((success) => {
@@ -231,7 +237,7 @@ function App() {
         alert("플레이리스트 재생 중 오류가 발생했습니다.");
       }
     },
-    pliName,
+    pliName: pliName,
     onCreatePlaylist: async (diary, title) => {
       const playlistName = `${title} - ${new Date().toLocaleDateString()}`;
       try {
@@ -303,6 +309,7 @@ function App() {
       }
     },
     pliKey,
+    track: track,
     seekTo: (progress) => {
       const newTime = progress;
       player.seek(newTime * 1000).then(() => {
