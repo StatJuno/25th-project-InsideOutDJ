@@ -56,17 +56,19 @@ function Player({
 
   useEffect(() => {
     let interval;
+    setProgress(getCurrentProgress()); // Update progress on pause
+
     if (isPlaying) {
+      let prevValue = getCurrentProgress();
 
       interval = setInterval(() => {
-        setProgress(getCurrentProgress());
-      }, duration); // Adjust the interval as needed
+        setProgress((prevValue) => prevValue + 1);
+      }, 1000); // Adjust the interval as needed
     } else {
       clearInterval(interval);
-      setProgress(getCurrentProgress()); // Update progress on pause
     }
     return () => clearInterval(interval);
-  }, [isPlaying, progress]);
+  }, [isPlaying, currentTime]);
 
   return (
     <OutBox>
