@@ -1,5 +1,5 @@
 // src/components/Player.js
-import React from "react";
+import React, { useState, useEffect } from "react";
 import tw from "tailwind-styled-components";
 import styled from "styled-components";
 
@@ -47,6 +47,27 @@ function Player({
   currentTime,
   duration
 }) {
+  const [progress, setProgress] = useState(0);
+
+  const getCurrentProgress = () => {
+    // Replace this with your actual logic to get the current progress
+    return currentTime; // Simulated progress value
+  };
+
+  useEffect(() => {
+    let interval;
+    if (isPlaying) {
+
+      interval = setInterval(() => {
+        setProgress(getCurrentProgress());
+      }, duration); // Adjust the interval as needed
+    } else {
+      clearInterval(interval);
+      setProgress(getCurrentProgress()); // Update progress on pause
+    }
+    return () => clearInterval(interval);
+  }, [isPlaying, progress]);
+
   return (
     <OutBox>
       <PlayListName>{pliName}</PlayListName>
@@ -153,7 +174,7 @@ function Player({
                   min="0"
                   max={duration}
                   step="1"
-                  value={currentTime}
+                  value={progress}
                   onChange={(e) => {
                     seekTo(e.target.value);
                   }}
