@@ -304,18 +304,14 @@ function App() {
     },
     pliKey,
     seekTo: (progress) => {
-      const newTime = progress * duration;
+      const newTime = progress;
       player.seek(newTime * 1000).then(() => {
         console.log(`재생시간 ${newTime}로 설정되었습니다.`);
       });
       setCurrentTime(newTime);
     },
-    getPlaytime: () => {
-      return currentTime;
-    },
-    getDuration: () => {
-      return duration;
-    }
+    currentTime: currentTime,
+    duration: duration
   };
   return <AppRoutes playerProps={playerProps} authProps={authProps} />;
 }

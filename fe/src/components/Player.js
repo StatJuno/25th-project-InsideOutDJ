@@ -26,7 +26,6 @@ const Slider = tw.input`
 `;
 
 const SeekSlider = tw.input`
-  appearance-none
   w-full
   h-1
   bg-gray-300
@@ -45,7 +44,8 @@ function Player({
   pliName,
   isPlaying,
   seekTo,
-  getPlaytime
+  currentTime,
+  duration
 }) {
   return (
     <OutBox>
@@ -151,11 +151,11 @@ function Player({
             <SeekSlider class="w-full"
                   type="range"
                   min="0"
-                  max="1"
-                  step="0.01"
+                  max={duration}
+                  step="1"
+                  value={currentTime}
                   onChange={(e) => {
-                    const progress = e.target.value;
-                    seekTo(progress);
+                    seekTo(e.target.value);
                   }}
                 />
           </div>
