@@ -1,11 +1,20 @@
 // src/components/Player.js
 import React, { useState, useEffect } from "react";
 import tw from "tailwind-styled-components";
-import styled from "styled-components";
 import empty_album from '../assets/empty_album.png'
 
+const Wrapper = tw.div`
+  max-w-[100%]
+  md:max-w-[70%]
+  m-auto
+  relative
+`;
+
 const Ball = tw.div`
-  w-full
+  w-[100%]
+  transform translate-x-[0%] xl:translate-x-[50%]
+  xl:w-[50%]
+  xl:min-w-[200px]
   h-full
   m-auto
   rounded-full 
@@ -72,8 +81,6 @@ function Player({
     setProgress(getCurrentProgress()); // Update progress on pause
 
     if (isPlaying) {
-      let prevValue = getCurrentProgress();
-
       interval = setInterval(() => {
         setProgress((prevValue) => prevValue + 1);
       }, 1000); // Adjust the interval as needed
@@ -90,13 +97,13 @@ function Player({
   };
 
   return (
-    <div class="max-w-[70%] m-auto">
+    <Wrapper>
       <PlayList>
         <h2>{pliName}</h2>
       </PlayList>
-      <div class="text-center m-auto relative">
-        <Ball>
-        </Ball>
+      <Ball>
+      </Ball>
+      <div class="text-center m-auto">
         <div class="flex flex-col justify-center gap-6 w-full">
           <div class="mt-20 z-30">
             <article class="bg-white p-8 rounded-lg shadow-md min-w-60 max-w-80 m-auto ">
@@ -108,7 +115,7 @@ function Player({
                 </div>
                 ) : (
                   <div>
-                    <img class="w-full mt-4 mb-4 rounded-lg shadow-lg shadow-gray-200" src={empty_album}/>
+                    <img class="w-full mt-4 mb-4 rounded-lg shadow-lg shadow-gray-200" src={empty_album} alt="Empty album"/>
                     <h2 class="text-xl font-semibold mt-4 mb-2">No track is currently playing</h2>
                     <p class="text-gray-600 text-sm mt-2 mb-4">Please wait</p>
                   </div>
@@ -235,7 +242,7 @@ function Player({
           </div>
         </div>
       </div>
-    </div>
+    </Wrapper>
   );
 }
 
