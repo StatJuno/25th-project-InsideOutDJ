@@ -1,6 +1,6 @@
 import torch
 import torch.nn as nn
-from transformers import BertTokenizer, BertForSequenceClassification
+from transformers import BertTokenizer, BertModel, BertForSequenceClassification
 import pandas as pd
 import numpy as np
 from sklearn.metrics.pairwise import cosine_similarity
@@ -8,6 +8,9 @@ from keybert import KeyBERT
 from sentence_transformers import SentenceTransformer
 import kss
 import ast
+import nltk
+from nltk.corpus import stopwords
+import re
 
 # KoBERTMultitaskModel 클래스 정의 (이전에 저장한 것과 동일하게 정의해야 함)
 class KoBERTMultitaskModel(nn.Module):
@@ -26,13 +29,15 @@ class KoBERTMultitaskModel(nn.Module):
         return valence_output, arousal_output
 
 # KoBERT 모델 및 토크나이저 불러오기
-model = torch.load('be/순서형회귀모델_v1.pth')
+model = torch.load('./be/순서형회귀모델_v1.pth')
 model = model.to('cuda' if torch.cuda.is_available() else 'cpu')
 model.eval()
 tokenizer = BertTokenizer.from_pretrained('monologg/kobert')
 
 def split_sentences(paragraph):
-    return kss.split_sentences(paragraph)
+    # 줄바꿈 문자를 공백으로 대체
+    clean_paragraph = paragraph.replace('\n', ' ')
+    return kss.split_sentences(clean_paragraph)
 
 def predict_emotion(model, tokenizer, sentence, device='cuda' if torch.cuda.is_available() else 'cpu'):
     encoding = tokenizer.encode_plus(
@@ -98,11 +103,11 @@ def calculate_distance(x, y):
 # ~70% : 0.6352747241405549
 
 def filter_by_intensity(df, distance):
-    if distance <= 0.185:
+    if distance <= 0.19:
         intensity_label = 'neutral'
-    elif 0.185 < distance <= 0.4:
+    elif 0.19 < distance <= 0.41:
         intensity_label = 'low'
-    elif 0.4 < distance <= 0.63:
+    elif 0.41 < distance <= 0.64:
         intensity_label = 'medium'
     else:
         intensity_label = 'high'
@@ -119,20 +124,35 @@ def get_songs_by_emotion_and_intensity(df, normalized_emotion):
     filtered_df = filter_by_intensity(df, distance)
     
     # neutral이 아닌 경우 감정 사분면으로 필터링
-    if distance > 0.185:
+    if distance > 0.19:
         quadrant = get_quadrant(*normalized_emotion)
         filtered_df = filtered_df[filtered_df['emotion'] == quadrant]
     
     return filtered_df
 
+# NLTK의 불용어 사전 다운로드
+nltk.download('stopwords')
+
+# 한국어 불용어 로드
+with open('be/stopwords-ko.txt', 'r', encoding='utf-8') as f:
+    korean_stopwords = f.read().splitlines()
+
+# 한국어 불용어를 텍스트에서 제거하는 함수
+def remove_korean_stopwords(text, stopwords):
+    pattern = re.compile(r'\b(' + '|'.join(stopwords) + r')\b')
+    return pattern.sub('', text)
 
 def extract_keywords(text, kw_model):
+    # 한국어 불용어 제거
+    text = remove_korean_stopwords(text, korean_stopwords)
+    # 키워드 추출
     keywords = kw_model.extract_keywords(text, keyphrase_ngram_range=(1, 2), stop_words='english', top_n=5)
     return [kw[0] for kw in keywords]
 
 def embed_keywords(keywords, sbert_model):
     embeddings = sbert_model.encode(keywords)
     return embeddings
+
 
 def calculate_similarity(input_embedding, song_embedding):
     # 입력 임베딩을 평균으로 줄여서 차원을 맞춤
@@ -151,18 +171,18 @@ def calculate_similarity(input_embedding, song_embedding):
 def get_comment_by_emotion_and_intensity(quadrant, intensity):
     comments = {
         "neutral": "평범한 하루를 보내셨군요.",
-        (1, "high"): "많이 행복한 하루를 보내셨군요!",
+        (1, "high"): "많이 행복한 하루를 보내셨군요! 내일도 오늘처럼 행복하세요",
         (1, "medium"): "행복한 기분이 느껴지네요.",
-        (1, "low"): "조금 행복한 하루를 보내셨군요.",
-        (2, "high"): "약간 복잡한 감정을 느끼고 계시군요.",
-        (2, "medium"): "조금 혼란스러운 하루였을지도 몰라요.",
-        (2, "low"): "살짝 우울한 기분을 느끼셨군요.",
+        (1, "low"): "조금 행복한 하루를 보내셨군요. 내일은 더 행복한 하루가 될거에요",
+        (2, "high"): "아주 힘든 하루를 보내셨군요. 금방 훌훌 털어버리기를 바랄게요.",
+        (2, "medium"): "힘든 하루에 노래를 들으면서 잠시 쉬어보는건 어떨까요.",
+        (2, "low"): "조금 힘든 하루를 보내셨군요. 내일은 힘들지 않기를 바랄게요.",
         (3, "high"): "힘든 하루를 보내셨군요. 힘내세요!",
         (3, "medium"): "많이 지치고 힘든 하루였군요.",
         (3, "low"): "조금 힘든 하루였을 것 같아요.",
-        (4, "high"): "기분이 많이 복잡하셨나 봐요.",
-        (4, "medium"): "조금 복잡한 기분이 느껴지네요.",
-        (4, "low"): "조금 혼란스러운 하루였을지도 몰라요.",
+        (4, "high"): "아주 편안한 하루를 지내셨나봐요.",
+        (4, "medium"): "편안함이 느껴지네요. 재충전의 시간을 가져봐요",
+        (4, "low"): "평범한 일상에서 벗어나 잠시 휴식을 취해보는건 어떨까요?",
     }
 
     if intensity == 'neutral':
@@ -170,7 +190,7 @@ def get_comment_by_emotion_and_intensity(quadrant, intensity):
     else:
         return comments.get((quadrant, intensity), "기분이 복잡하셨던 것 같아요.")
 
-def recommend_songs(paragraph, df_path='be/tracks_final.csv'):
+def recommend_songs(paragraph, df_path='./be/tracks_final.csv'):
     # 감정 분석을 수행하고, 그 결과를 반환할 데이터에 포함시킴
     normalized_emotion = calculate_paragraph_emotion(paragraph)
     
@@ -187,8 +207,9 @@ def recommend_songs(paragraph, df_path='be/tracks_final.csv'):
     matching_songs = get_songs_by_emotion_and_intensity(df, normalized_emotion)
     
     # 키워드 임베딩 및 유사도 계산
-    kw_model = KeyBERT()
     sbert_model = SentenceTransformer('paraphrase-multilingual-MiniLM-L12-v2')
+    kw_model = KeyBERT(model=sbert_model)
+
 
     input_keywords = extract_keywords(paragraph, kw_model)
     input_embedding = embed_keywords(input_keywords, sbert_model)
@@ -209,26 +230,28 @@ def recommend_songs(paragraph, df_path='be/tracks_final.csv'):
     
     return {
         "emotion_analysis": emotion_analysis_result,
+        # 코멘트 추가할거면 코멘트 추가하고 아래 print문도 각주해제
         #"comment": comment,
         "recommended_songs": top_5_songs_data
     }
 
 
-# # 예시 문단 입력
-# paragraph = """
-# 오늘 날씨가 너무 좋네요. 기분이 좋지 않아요. 이 영화는 정말 재미있었어요.
-# """
+# 예시 문단 입력
+paragraph = """
+오늘 너무 행복했어. 정말 행복했어. 커피를 마셨어.
+"""
 
-# # 노래 추천 실행
-# recommendation_result = recommend_songs(paragraph)
+# 노래 추천 실행
+recommendation_result = recommend_songs(paragraph)
 
-# # 결과 출력
-# print("Emotion Analysis Result:")
-# print(recommendation_result["emotion_analysis"])
+# 결과 출력
+print("Emotion Analysis Result:")
+print(recommendation_result["emotion_analysis"])
 
+# 코멘트 추가 프린트문
 # print("\nComment:")
 # print(recommendation_result["comment"])
 
-# print("\nRecommended Songs:")
-# for song in recommendation_result["recommended_songs"]:
-#     print(f"Track: {song['track_name']}, Artist: {song['artist_name']}, URI: {song['uri']}")
+print("\nRecommended Songs:")
+for song in recommendation_result["recommended_songs"]:
+    print(f"Track: {song['track_name']}, Artist: {song['artist_name']}, URI: {song['uri']}")
