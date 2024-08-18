@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import tw from "tailwind-styled-components";
 import empty_album from '../assets/empty_album.png'
+import SeekSlider from "./SeekSlider";
 
 const Wrapper = tw.div`
   max-w-[100%]
@@ -38,21 +39,13 @@ const Slider = tw.input`
   appearance-none
   w-24
   h-2
-  bg-gray-200
-  accent-blue-500
+  bg-gray-300
+  accent-teal-500
   rounded-lg
   cursor-pointer
   transition-opacity
   opacity-100
-`;
-
-const SeekSlider = tw.input`
-  w-full
-  h-2
-  accent-teal-500
-  opacity-75
-  cursor-pointer
-  rounded-lg
+  range range-xs
 `;
 
 function Player({
@@ -98,13 +91,11 @@ function Player({
 
   return (
     <Wrapper>
-      <PlayList>
-        <h2>{pliName}</h2>
-      </PlayList>
+      <PlayList>{pliName}</PlayList>
       <Ball>
       </Ball>
       <div class="text-center m-auto">
-        <div class="flex flex-col justify-center gap-6 w-full">
+        <div class="flex flex-col justify-center gap-6 w-full max-h-[800px]">
           <div class="mt-20 z-30">
             <article class="bg-white p-8 rounded-lg shadow-md min-w-60 max-w-80 m-auto ">
               {track ? (
@@ -187,17 +178,8 @@ function Player({
                   </svg>
                 </button>
               </div>
-              <div>
-                <SeekSlider class="w-full"
-                      type="range"
-                      min="0"
-                      max={duration}
-                      step="1"
-                      value={progress}
-                      onChange={(e) => {
-                        seekTo(e.target.value);
-                      }}
-                    />
+              <div class="relative">
+                <SeekSlider progress={progress} duration={duration} seekTo={seekTo}></SeekSlider>
               </div>
               <div class="flex justify-between mt-2 text-sm text-gray-600">
                 <span>{formatTime(progress)}</span>
@@ -234,7 +216,13 @@ function Player({
                 <label class="relative inline-flex cursor-pointer">
                   <input id="switch-2" type="checkbox" class="peer sr-only" />
                   <label for="switch-2" class="hidden"></label>
-                  <div class="relative w-9 h-5 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-teal-100 rounded-full peer dark:bg-gray-100 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-gray-00 peer-checked:bg-teal-500"></div>
+                  <div class="relative w-9 h-5 bg-gray-200 peer-focus:outline-none 
+                  peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-teal-100 
+                  rounded-full peer dark:bg-gray-100 peer-checked:after:translate-x-full 
+                  rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white 
+                  after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white 
+                  after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 
+                  after:transition-all dark:border-gray-00 peer-checked:bg-teal-500"></div>
                 </label>
                 <span>Play next</span>
               </div>
