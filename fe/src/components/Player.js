@@ -1,6 +1,7 @@
 // src/components/Player.js
 import React, { useState, useEffect } from "react";
 import tw from "tailwind-styled-components";
+import Marquee from "react-fast-marquee";
 import empty_album from "../assets/empty_album.png";
 import SeekSlider from "./SeekSlider";
 
@@ -17,11 +18,11 @@ const Ball = tw.div`
   bg-yellow-100 
   shadow-lg 
   absolute
-  z-0
+  z-30
   pulsating-circle
 `;
 const PlayList = tw.h1`
-text-3xl 
+  text-4xl subpixel-antialiased italic text-slate-600 pt-4 pb-4 pl-2 pr-2
 `;
 
 const Track = tw.div`
@@ -204,15 +205,37 @@ function Player({
       </aside>
       <Wrapper>
         <section>
-          <div className="h-[600px] w-full bg-teal-100"></div>
+          <div className="h-[600px] w-full bg-teal-100 overflow-hidden z-20">
+            <Marquee speed={25} pauseOnHover={true} className="text-8xl font-black italic text-teal-800 mt-2 mb-4 subpixel-antialiased drop-shadow-[0_4px_4px_rgb(45, 212, 191)]">
+              #나의추천노래 #InsideOutDJ #YBIGTA-신입프로젝트 
+            </Marquee>
+            <Marquee pauseOnHover={true} className="text-8xl font-black italic text-teal-600 mt-4 tb-4 subpixel-antialiased drop-shadow-[0_4px_4px_rgb(45, 212, 191)]">
+              #감성 #스트리밍 #스포티파이 #내플레이리스트 #음악 #플레이어 
+            </Marquee>
+            <Marquee pauseOnHover={true} className="text-8xl font-black italic text-teal-600 mt-4 tb-4 subpixel-antialiased drop-shadow-[0_4px_4px_rgb(45, 212, 191)]">
+            #평온 #희망 #노스탤지어 #외로움 #우울 #기쁨 #그리움 #화남 #열정 #흥분 #감동 #행복 #슬픔 #만족 #설렘 #두려움 
+            </Marquee>
+            <Marquee speed={35} pauseOnHover={true} className="text-6xl font-bold italic text-teal-400 mt-4 tb-4 subpixel-antialiased drop-shadow-[0_4px_4px_rgb(45, 212, 191)]">
+            #기쁨 #슬픔 #흥분 #평온 #노스탤지어 #열정 #그리움 #만족 #외로움 #감동 #우울 #희망 #두려움 #화남 #행복 #설렘 
+            </Marquee>
+            <Marquee speed={35} pauseOnHover={true} className="text-6xl font-bold italic text-teal-400 mt-4 tb-4 subpixel-antialiased drop-shadow-[0_4px_4px_rgb(45, 212, 191)]">
+              #트로트 #CCM #힙합 #레게 #클래식 #포크 음악 #컨트리 뮤직 #일렉트로닉 뮤직 #블루스 #재즈 #팝 #록 음악 #발라드 #디스코 #로큰롤 #전자 음악 
+            </Marquee>
+            <Marquee speed={35} pauseOnHover={true} className="text-6xl font-bold italic text-white mt-4 tb-4 subpixel-antialiased drop-shadow-md">
+            #블루스 #일렉트로닉 뮤직 #트로트 #클래식 #록 음악 #발라드 #디스코 #재즈 #로큰롤 #CCM #레게 #전자 음악 #힙합 #팝 #포크 음악 #컨트리 뮤직 
+            </Marquee>
+            <Marquee speed={35} pauseOnHover={true} className="text-6xl font-bold italic text-white mt-4 tb-4 subpixel-antialiased drop-shadow-md">
+            #레게 #발라드 #록 음악 #컨트리 뮤직 #블루스 #힙합 #전자 음악 #CCM #클래식 #포크 음악 #트로트 #일렉트로닉 뮤직 #팝 #로큰롤 #재즈 #디스코 
+            </Marquee>
+          </div>
         </section>
-        <section class="bg-teal-200">
+        <section class="bg-gradient-to-r from-slate-400 from-[8%] via-teal-200 via-45% to-teal-500">
           <PlayList>{pliName}</PlayList>
           <Ball></Ball>
-          <div class="text-center m-auto relative -top-80 w-full">
+          <div class="text-center m-auto w-full">
             <div class="flex flex-col justify-center gap-6 w-full max-h-[800px]">
               <div class="mt-20 z-30">
-                <article class="bg-white p-8 rounded-lg shadow-md min-w-60 max-w-80 m-auto ">
+                <article class="bg-white p-8 rounded-lg shadow-md min-w-60 max-w-80 m-auto relative -top-80">
                   {track ? (
                     <div>
                       <img
@@ -320,7 +343,7 @@ function Player({
                   </div>
                 </article>
               </div>
-              <div class="mb-20 z-30">
+              <div class="mb-20 z-30 relative -top-80">
                 <div class="bg-white p-8 rounded-lg shadow-md flex flex-row gap-4 items-center justify-center text-center min-w-80 max-w-80 m-auto">
                   <div class="flex flex-row items-center gap-2 mt-2 mb-2 w-full">
                     <svg
@@ -371,6 +394,10 @@ function Player({
               </div>
             </div>
           </div>
+        </section>
+        <section>
+          <span className="mt-4 mb-4">Made with ❤️ by InsideOutDJ. </span>
+          
         </section>
       </Wrapper>
     </div>
