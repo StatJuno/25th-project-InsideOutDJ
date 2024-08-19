@@ -32,5 +32,7 @@ be/__pycache__
 
 be/tracks_final.csv
 be/kobert_emotion_model.pth
+be/순서형회귀모델_v1.pth
+be/assets
 
 

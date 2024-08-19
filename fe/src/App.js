@@ -13,6 +13,8 @@ function App() {
     "user-read-playback-state",
     "user-read-currently-playing",
     "streaming",
+    "user-read-email", // 이메일 주소 읽기 권한 추가
+    "user-read-private",
   ].join(" ");
 
   const [token, setToken] = useState("");
@@ -22,7 +24,7 @@ function App() {
   const [pliName, setPliName] = useState("");
   const [playlists, setPlaylists] = useState([]);
   const [isPlaying, setIsPlaying] = useState(false);
-
+  const [userInfo, setUserInfo] = useState(null);
   // 유저 토큰 받아오기
   // navigate 정의
 
@@ -42,6 +44,47 @@ function App() {
     setToken(token);
   }, []);
 
+  //로그인
+  useEffect(() => {
+    const fetchAndRegisterUser = async () => {
+      if (!token) return;
+
+      try {
+        // 스포티파이 사용자 정보를 가져옴
+        const userResponse = await axios.get("https://api.spotify.com/v1/me", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        const userData = userResponse.data;
+        setUserInfo(userData);
+        // console.log(userData);
+
+        // 이메일을 기반으로 백엔드에 해당 사용자가 있는지 확인
+        const checkUserResponse = await axios.get(
+          `http://localhost:8000/users/check_by_email/${userData.email}`
+        );
+
+        if (!checkUserResponse.data.exists) {
+          // 백엔드에 사용자 정보를 전송하여 사용자 생성
+          await axios.post("http://localhost:8000/users/", {
+            id: userData.id, // userData.id를 id로 전달
+            username: userData.display_name,
+            email: userData.email,
+            hashed_password: userData.id, // 임의로 ID를 비밀번호로 사용 (원하는 해시 로직으로 변경 가능)
+          });
+          console.log("User registered successfully!");
+        } else {
+          console.log("User already registered.");
+        }
+      } catch (error) {
+        console.error("Error fetching or registering user:", error);
+      }
+    };
+
+    fetchAndRegisterUser();
+  }, [token]);
   //SDK 로딩
   useEffect(() => {
     if (!token) return;
@@ -291,75 +334,6 @@ function App() {
         );
 
         console.log("Playlist created successfully!");
-        //   } catch (error) {
-        //     console.error("Error creating playlist:", error);
-        //   }
-        // };
-        // onCreatePlaylist: async (diary, title) => {
-        //   const playlistName = `${title} - ${new Date().toLocaleDateString()}`;
-        //   try {
-        //     const userResponse = await axios.get("https://api.spotify.com/v1/me", {
-        //       headers: {
-        //         Authorization: `Bearer ${token}`,
-        //       },
-        //     });
-
-        //     const userId = userResponse.data.id;
-
-        //     // 플레이리스트 생성
-        //     const playlistResponse = await axios.post(
-        //       `https://api.spotify.com/v1/users/${userId}/playlists`,
-        //       {
-        //         name: playlistName,
-        //         description: "Playlist created based on diary entry",
-        //         public: false,
-        //       },
-        //       {
-        //         headers: {
-        //           Authorization: `Bearer ${token}`,
-        //           "Content-Type": "application/json",
-        //         },
-        //       }
-        //     );
-
-        //     const newPliKey = playlistResponse.data.id; // 생성된 플레이리스트의 ID
-        //     setPliKey(newPliKey);
-        //     setPliName(playlistResponse.data.name);
-
-        //     // 예시 데이터
-        //     const uri_base = "spotify:track:";
-        //     const uris = ["2rOA9vEsnpNB6L5XgmibKn", "3PGK6qlEztoGlpJoW603YA"].map(
-        //       (i) => `${uri_base}${i}`
-        //     );
-
-        //     // 생성된 플레이리스트에 트랙 추가
-        //     await axios.post(
-        //       `https://api.spotify.com/v1/playlists/${newPliKey}/tracks`,
-        //       {
-        //         uris: uris,
-        //         position: 0,
-        //       },
-        //       {
-        //         headers: {
-        //           Authorization: `Bearer ${token}`,
-        //           "Content-Type": "application/json",
-        //         },
-        //       }
-        //     );
-        // await axios.put(
-        //   "https://api.spotify.com/v1/me/player/play",
-        //   {
-        //     context_uri: `spotify:playlist:${newPliKey}`,
-        //     device_id: deviceId,
-        //   },
-        //   {
-        //     headers: {
-        //       Authorization: `Bearer ${token}`,
-        //       "Content-Type": "application/json",
-        //     },
-        //   }
-        // );
-        // alert("플레이리스트가 재생되었습니다.");
       } catch (error) {
         console.error("플레이리스트 생성 중 오류 발생:", error);
         alert("플레이리스트 생성 중 오류가 발생했습니다.");

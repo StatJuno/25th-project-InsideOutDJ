@@ -11,6 +11,7 @@ services:
     volumes:
       - ./fe:/workspace
       - ./assets:/workspace/assets
+      - /workspace/node_modules
     command: npm start
     tty: true
 
