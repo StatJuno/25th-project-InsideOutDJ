@@ -3,6 +3,8 @@ import React, { useState, useEffect } from "react";
 import tw from "tailwind-styled-components";
 import Marquee from "react-fast-marquee";
 import empty_album from "../assets/empty_album.png";
+import menu_icon from "../assets/menu.svg";
+import arrow_right_icon from "../assets/arrow-right.svg";
 import SeekSlider from "./SeekSlider";
 
 const Wrapper = tw.div`
@@ -83,33 +85,55 @@ function Player({
     return `${minutes}:${secs < 10 ? "0" : ""}${secs}`;
   };
 
+  const [slideMenuToggled, setSlideMenuToggled] = useState(false);
+  const [slideMenuSetting, setSlideMenuSetting] = useState('hidden w-0')
+
+  // toggle the slide menu with animation
+  const toggleSlideMenu = () => {
+    setSlideMenuToggled(!slideMenuToggled);
+
+    if(slideMenuToggled) {
+      setSlideMenuSetting('w-0')
+        
+      setTimeout(function () {
+        setSlideMenuSetting('w-[300px] transition-all duration-200 ease-in')
+      }, 200);
+    } else {
+      setSlideMenuSetting('w-0 transition-all duration-200 ease-in')
+
+      setTimeout(function () {
+        setSlideMenuSetting('hidden')
+      }, 200);
+    }
+  }
+
   return (
-    <div class="relative">
-      <aside
-        class="absolute top-0 right-0 group/sidebar flex flex-col shrink-0 lg:w-[300px] w-[250px] transition-all duration-300 ease-in-out m-0 fixed z-40 inset-y-0 bg-white border-r border-r-dashed border-r-neutral-200 sidenav fixed-start"
-        id="sidenav-main"
+    <div class="relative h-full">
+      <button id="mainmenuicon_btn" className="m-4 absolute top-0 right-0" onClick={toggleSlideMenu}><img src={menu_icon} alt="Menu"/></button>
+      <div
+        class="h-full absolute overflow-hidden bg-gray-900 top-0 right-0 m-0 fixed z-40 inset-y-0 bg-white border-r border-r-dashed border-r-neutral-200 fixed-start"
+        id="menuslide-framer"
       >
-        <div class="h-[96px] m-4 content-center">
-          <a
-            class="transition-colors duration-200 ease-in-out"
-            href="https://www.loopple.com"
-          >
-            <img
-              alt="Logo"
-              src="https://raw.githubusercontent.com/Loopple/loopple-public-assets/main/riva-dashboard-tailwind/img/logos/loopple.svg"
-              class="inline"
-            />
-          </a>
-        </div>
+        <div class={slideMenuSetting}>
+          <a id="mainmenuicon_close" className="m-4 absolute top-0 right-0" onClick={toggleSlideMenu}><img src={arrow_right_icon} alt="Close"/></a>
+          <div class="h-[96px] m-4 content-center">
+            <a
+              class="transition-colors duration-200 ease-in"
+              href="https://www.loopple.com"
+            >
+              <img
+                alt="Logo"
+                src="https://raw.githubusercontent.com/Loopple/loopple-public-assets/main/riva-dashboard-tailwind/img/logos/loopple.svg"
+                class="inline"
+              />
+            </a>
+          </div>
 
-        <div class="hidden border-b border-dashed lg:block dark:border-neutral-700/70 border-neutral-200"></div>
-
-        <div class="flex items-center justify-between px-8 py-5">
-          <div class="flex items-center mr-5">
+          <div class="px-8 py-5">
             <div class="mr-5">
-              <div class="inline-block relative shrink-0 cursor-pointer rounded-[.95rem]">
+              <div class="inline-block relative cursor-pointer rounded-[.95rem]">
                 <img
-                  class="w-[40px] h-[40px] shrink-0 inline-block rounded-[.95rem]"
+                  class="w-[40px] h-[40px] inline-block rounded-[.95rem]"
                   src="https://raw.githubusercontent.com/Loopple/loopple-public-assets/main/riva-dashboard-tailwind/img/avatars/avatar1.jpg"
                   alt="avatar image"
                 />
@@ -153,57 +177,62 @@ function Player({
               </svg>
             </span>
           </a>
-        </div>
 
-        <div class="hidden border-b border-dashed lg:block dark:border-neutral-700/70 border-neutral-200"></div>
+          <div class="hidden border-b border-dashed lg:block dark:border-neutral-700/70 border-neutral-200"></div>
 
-        <div class="relative pl-3 my-5 overflow-y-scroll">
+          <div class="relative pl-3 my-5 overflow-y-scroll">
 
-          {/* <!-- menu item --> */}
-          <div class="m-4">
-          <span class="font-semibold text-[0.95rem] uppercase dark:text-neutral-500/80 text-secondary-dark">
-                플레이리스트
+            {/* <!-- menu item --> */}
+            <div class="m-4">
+            <span class="font-semibold text-[0.95rem] uppercase dark:text-neutral-500/80 text-secondary-dark">
+                  플레이리스트
+                </span>
+            </div>
+
+            {/* <!-- menu item --> */}
+            <div class="m-4">
+              <span class="m-4 select-none cursor-pointer rounded-[.95rem]">
+                <a
+                  href="javascript:;"
+                  class="text-[1.15rem] dark:text-neutral-400/75 text-stone-500 hover:text-dark"
+                >
+                  - 2024. 8. 19
+                </a>
               </span>
-          </div>
+            </div>
 
-          {/* <!-- menu item --> */}
-          <div class="m-4">
-            <span class="m-4 select-none cursor-pointer rounded-[.95rem]">
-              <a
-                href="javascript:;"
-                class="text-[1.15rem] dark:text-neutral-400/75 text-stone-500 hover:text-dark"
-              >
-                - 2024. 8. 19
-              </a>
-            </span>
-          </div>
+            {/* <!-- menu item --> */}
+            <div class="m-4">
+              <span class="m-4 select-none cursor-pointer my-[.4rem] rounded-[.95rem]">
+                <a
+                  href="javascript:;"
+                  class="text-[1.15rem] dark:text-neutral-400/75 text-stone-500 hover:text-dark"
+                >
+                  - 2024. 8. 18
+                </a>
+              </span>
+            </div>
 
-          {/* <!-- menu item --> */}
-          <div class="m-4">
-            <span class="m-4 select-none cursor-pointer my-[.4rem] rounded-[.95rem]">
-              <a
-                href="javascript:;"
-                class="text-[1.15rem] dark:text-neutral-400/75 text-stone-500 hover:text-dark"
-              >
-                - 2024. 8. 18
-              </a>
-            </span>
-          </div>
-
-          {/* <!-- menu item --> */}
-          <div class="m-4">
-            <span class="m-4 select-none cursor-pointer my-[.4rem] rounded-[.95rem]">
-              <a
-                href="javascript:;"
-                class="text-[1.15rem] dark:text-neutral-400/75 text-stone-500 hover:text-dark"
-              >
-                - 2024. 8. 17
-              </a>
-            </span>
+            {/* <!-- menu item --> */}
+            <div class="m-4">
+              <span class="m-4 select-none cursor-pointer my-[.4rem] rounded-[.95rem]">
+                <a
+                  href="javascript:;"
+                  class="text-[1.15rem] dark:text-neutral-400/75 text-stone-500 hover:text-dark"
+                >
+                  - 2024. 8. 17
+                </a>
+              </span>
+            </div>
           </div>
         </div>
-      </aside>
+      </div>
       <Wrapper>
+        <section>
+          <div className="h-6 bg-teal-800">
+
+          </div>
+        </section>
         <section>
           <div className="h-[600px] w-full bg-teal-100 overflow-hidden z-20">
             <Marquee speed={25} pauseOnHover={true} className="text-8xl font-black italic text-teal-800 mt-2 mb-4 subpixel-antialiased drop-shadow-[0_4px_4px_rgb(45, 212, 191)]">
