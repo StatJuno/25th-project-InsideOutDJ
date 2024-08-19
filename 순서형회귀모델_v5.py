@@ -12,9 +12,9 @@ MODEL_NAME = "monologg/kobert"
 LEARNING_RATE = 1e-5
 MAX_LENGTH = 64
 BATCH_SIZE = 16
-EPOCHS = 5
-OUTPUT_DIR_VALENCE = "./result_valence"
-OUTPUT_DIR_AROUSAL = "./result_arousal"
+EPOCHS = 10
+OUTPUT_DIR_VALENCE = "result_valence"
+OUTPUT_DIR_AROUSAL = "result_arousal"
 WARMUP_STEPS = 500
 WEIGHT_DECAY = 0.01
 LR_SCHEDULER_TYPE = "linear"
@@ -28,7 +28,7 @@ device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 # -------------------------------
 # 데이터 로드 및 토크나이저 설정
 # -------------------------------
-df = pd.read_csv("./감정데이터_v3.csv")
+df = pd.read_csv("감정데이터_v3.csv")
 raw_ds = Dataset.from_pandas(df)
 
 train_test_split = raw_ds.train_test_split(test_size=0.2, seed=SEED)
