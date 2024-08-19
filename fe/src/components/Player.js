@@ -1,14 +1,21 @@
 // src/components/Player.js
 import React from "react";
 import tw from "tailwind-styled-components";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 const OutBox = tw.div`
   flex items-center justify-center flex-col min-w-96 w-full  min-h-192 h-full
 `;
 const Ball = tw.div`
-flex items-center justify-center min-w-96 w-96 h-96  rounded-full bg-yellow-100 shadow-lg transition ease-in-out hover:animate-pulse
-`;
+    flex items-center justify-center min-w-96 w-96 h-96  rounded-full shadow-lg transition ease-in-out hover:animate-pulse
+`.withStyle(({ color }) => ({
+  backgroundColor: color,
+}));
+
+// const Ball = tw.div`
+// flex items-center justify-center min-w-96 w-96 h-96  rounded-full ${emotion} shadow-lg transition ease-in-out hover:animate-pulse
+// `;
 const PlayListName = tw.h1`
 text-3xl 
 `;
@@ -24,7 +31,13 @@ const Slider = tw.input`
   transition-opacity
   opacity-100
 `;
+const PlaylistBtn = tw.button`
+  fixed top-4 right-4 py-1 px-3 bg-gray-200 rounded-full text-sm border-1 shadow-lg transition ease-in-out hover:bg-green-100
+`;
 
+const DiaryBtn = tw.button`
+  fixed top-4 left-4 py-1 px-3 bg-gray-200 rounded-full text-sm border-1 shadow-lg transition ease-in-out hover:bg-yellow-100
+`;
 function Player({
   togglePlayPause,
   skipToNext,
@@ -34,11 +47,22 @@ function Player({
   playPlaylist,
   pliName,
   isPlaying,
+  emotion,
 }) {
+  const navigate = useNavigate();
+  const goToPlaylists = () => {
+    navigate("/playlists");
+  };
+  const goToDiary = () => {
+    navigate("/diary");
+  };
+
   return (
     <OutBox>
+      <PlaylistBtn onClick={goToPlaylists}>기억저장소 가기</PlaylistBtn>
+      <DiaryBtn onClick={goToDiary}>일기 쓰러 가기</DiaryBtn>
       <PlayListName>{pliName}</PlayListName>
-      <Ball>
+      <Ball className={emotion}>
         <div>
           <button onClick={skipToPrevious}>
             <svg

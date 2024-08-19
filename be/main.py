@@ -41,18 +41,31 @@ class User(BaseModel):
             user_dict['_id'] = user_dict['id']  # 전달된 id 값을 _id로 설정
             del user_dict['id']
         return user_dict
-
 class Playlist(BaseModel):
-    id: Optional[str] = Field(alias="_id")
+    id: Optional[str] = Field(None, alias="_id")
     user_id: str
-    playlist_name: str
     playlist_id: str
+    playlist_name: str
     emotion_analysis: dict
-    recommended_songs: List[dict]
+    songs: List[dict]
+    diary: Optional[str]  # 새로운 필드 추가
 
     class Config:
         allow_population_by_field_name = True
         json_encoders = {ObjectId: str}
+
+    @classmethod
+    def from_mongo(cls, playlist: dict) -> "Playlist":
+        # MongoDB에서 가져온 데이터를 Pydantic Playlist 모델로 변환하는 메소드
+        return cls(
+            id=str(playlist["_id"]),
+            user_id=playlist["user_id"],
+            playlist_id=playlist["playlist_id"],
+            playlist_name=playlist["playlist_name"],
+            emotion_analysis=playlist["emotion_analysis"],
+            songs=playlist["songs"],
+            diary=playlist.get("diary")  # MongoDB 데이터에 diary 필드 추가
+        )
 
 # 사용자 생성
 @app.post("/users/", response_model=User)
@@ -103,7 +116,7 @@ async def create_playlist(playlist: Playlist):
 @app.get("/users/{user_id}/playlists/", response_model=List[Playlist])
 async def get_user_playlists(user_id: str):
     playlists = await playlist_collection.find({"user_id": user_id}).to_list(1000)
-    return playlists
+    return [Playlist.from_mongo(playlist) for playlist in playlists]
 
 
 # 특정 플레이리스트 조회
@@ -123,12 +136,6 @@ app.add_middleware(
     allow_methods=["*"],  # 모든 HTTP 메서드를 허용
     allow_headers=["*"],  # 모든 헤더를 허용
 )
-
-# @app.post("/generate_playlist")
-# def generate_playlist(diary: str = Body(..., example="오늘 하루는 정말 힘들었어...")):
-#     print(f"Received diary: {diary}")
-#     songs = recommend_songs(diary)  # 모델과 토크나이저를 사용하여 추천된 노래 목록 생성
-#     return {"recommended_songs": songs}
 
 @app.post("/generate_playlist")
 async def generate_playlist(diary: str = Body(...), title: str = Body(...), token: str = Body(...)):
@@ -178,7 +185,8 @@ async def generate_playlist(diary: str = Body(...), title: str = Body(...), toke
         "playlist_id": playlist_id,
         "playlist_name": playlist_name,
         "emotion_analysis": songs_data["emotion_analysis"],
-        "songs": songs_data["recommended_songs"]
+        "songs": songs_data["recommended_songs"],
+        "diary": diary
     }
     await playlist_collection.insert_one(playlist_record)
 

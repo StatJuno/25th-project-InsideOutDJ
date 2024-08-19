@@ -16,6 +16,9 @@ const CreateBtn = tw.button`
 const DiaryText = tw.textarea`
  p-3 text-center w-[95%] m-10 h-full 
 `;
+const PlaylistBtn = tw.button`
+  fixed top-4 right-4 py-1 px-3 bg-gray-200 rounded-full text-sm border-1 shadow-lg transition ease-in-out hover:bg-green-100
+`;
 
 function Diary({ onCreatePlaylist }) {
   const [diary, setDiary] = useState("");
@@ -24,12 +27,18 @@ function Diary({ onCreatePlaylist }) {
 
   const handleDiarySubmit = async () => {
     const cleanedDiary = diary.replace(/\n/g, " ");
+
     await onCreatePlaylist(cleanedDiary, title);
     navigate("/loading");
   };
 
+  const goToPlaylists = () => {
+    navigate("/playlists");
+  };
+
   return (
     <OutBox>
+      <PlaylistBtn onClick={goToPlaylists}>기억저장소 가기</PlaylistBtn>
       <HowAbout>오늘 하루는 어땠나요?</HowAbout>
       <OutBox>
         <input

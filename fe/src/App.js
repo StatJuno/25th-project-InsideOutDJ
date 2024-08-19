@@ -16,6 +16,28 @@ function App() {
     "user-read-email", // 이메일 주소 읽기 권한 추가
     "user-read-private",
   ].join(" ");
+  // getEmotionLabel 함수
+  const getEmotionLabel = (x, y) => {
+    if (x > 0 && y > 0) return "기쁨 (Joy)";
+    if (x > 0 && y < 0) return "평온 (Calmness)";
+    if (x < 0 && y > 0) return "분노 (Anger)";
+    if (x < 0 && y < 0) return "우울 (Sadness)";
+    return "중립 (Neutral)";
+  };
+
+  // 감정에 따른 색상을 반환하는 함수
+  const getEmotionColor = (x, y) => {
+    if (x >= 0 && y >= 0) {
+      return "bg-yellow-200";
+    } else if (x < 0 && y >= 0) {
+      return "bg-red-200";
+    } else if (x < 0 && y < 0) {
+      return "bg-blue-200";
+    } else if (x >= 0 && y < 0) {
+      return "bg-green-200";
+    }
+    return "bg-gray-200"; // 기본 색상
+  };
 
   const [token, setToken] = useState("");
   const [deviceId, setDeviceId] = useState(null);
@@ -25,6 +47,7 @@ function App() {
   const [playlists, setPlaylists] = useState([]);
   const [isPlaying, setIsPlaying] = useState(false);
   const [userInfo, setUserInfo] = useState(null);
+  const [emotion, setEmotion] = useState("");
   // 유저 토큰 받아오기
   // navigate 정의
 
@@ -169,7 +192,7 @@ function App() {
       console.log("Playback transferred to device:", deviceId);
     } catch (error) {
       console.error("Playback transfer failed:", error);
-      alert("Playback transfer failed. Please try again.");
+      // alert("Playback transfer failed. Please try again.");
     }
   };
 
@@ -188,6 +211,7 @@ function App() {
   const playerProps = {
     player,
     isPlaying,
+    setPliName,
     togglePlayPause: async () => {
       if (!player) {
         console.error("플레이어가 초기화되지 않았습니다.");
@@ -239,7 +263,7 @@ function App() {
       console.log("Using device ID:", deviceId);
 
       if (!deviceId) {
-        alert("플레이어가 준비되지 않았습니다. 잠시 후 다시 시도하세요.");
+        // alert("플레이어가 준비되지 않았습니다. 잠시 후 다시 시도하세요.");
         return;
       }
 
@@ -257,22 +281,27 @@ function App() {
             },
           }
         );
-        alert("플레이리스트가 재생되었습니다.");
+        // alert("플레이리스트가 재생되었습니다.");
       } catch (error) {
         console.error("플레이리스트 재생 중 오류 발생:", error);
         console.log("Response:", error.response);
-        alert("플레이리스트 재생 중 오류가 발생했습니다.");
+        // alert("플레이리스트 재생 중 오류가 발생했습니다.");
       }
     },
     pliName,
     onCreatePlaylist: async (diary, title) => {
       try {
+        // 현재 날짜를 가져와 형식 지정
+        const date = new Date().toLocaleDateString(); // 예: "8/18/2024"
+
+        // 제목에 날짜를 추가
+        const titledWithDate = `${title} - ${date}`;
         // FastAPI 서버에 다이어리와 제목 데이터를 전송
         const response = await axios.post(
           "http://localhost:8000/generate_playlist",
           {
             diary,
-            title,
+            title: titledWithDate,
             token, // Spotify 토큰을 함께 보냄
           }
         );
@@ -283,14 +312,42 @@ function App() {
         // 필요한 경우 playlistData를 사용하여 상태를 업데이트
         setPliKey(playlistData.playlist_id);
         setPliName(playlistData.playlist_name);
+        // 감정 분석 데이터를 상태로 관리
+        const { normalized_emotion } = playlistData.emotion_analysis;
+
+        // 감정 레이블 및 색상 가져오기
+        const emotionLabel = getEmotionLabel(
+          normalized_emotion.x,
+          normalized_emotion.y
+        );
+        const emotionColor = getEmotionColor(
+          normalized_emotion.x,
+          normalized_emotion.y
+        );
+        setEmotion(emotionColor);
+
+        // 상태나 UI 업데이트 (예: 감정 상태를 표시하는 부분 추가)
+        console.log(`Emotion: ${emotionLabel}, Color: ${emotionColor}`);
+
+        // UI에 적용하고자 한다면 상태를 업데이트하거나 직접 적용할 수 있음
+        // 예: setEmotionState({ label: emotionLabel, color: emotionColor });
       } catch (error) {
         console.error("플레이리스트 생성 중 오류 발생:", error);
         alert("플레이리스트 생성 중 오류가 발생했습니다.");
       }
     },
+    emotion,
+    setEmotion,
     pliKey,
   };
-  return <AppRoutes playerProps={playerProps} authProps={authProps} />;
+  return (
+    <AppRoutes
+      playerProps={playerProps}
+      authProps={authProps}
+      token={token}
+      userInfo={userInfo}
+    />
+  );
 }
 
 export default App;
