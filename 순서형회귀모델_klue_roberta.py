@@ -8,11 +8,11 @@ import numpy as np
 # -------------------------------
 # 학습 파라미터 설정
 # -------------------------------
-MODEL_NAME = "monologg/kobert"
+MODEL_NAME = "klue/roberta-large"
 LEARNING_RATE = 1e-5
 MAX_LENGTH = 64
 BATCH_SIZE = 16
-EPOCHS = 5
+EPOCHS = 10
 OUTPUT_DIR_VALENCE = "./result_valence"
 OUTPUT_DIR_AROUSAL = "./result_arousal"
 WARMUP_STEPS = 500
