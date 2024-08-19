@@ -29,10 +29,23 @@ class KoBERTMultitaskModel(nn.Module):
         return valence_output, arousal_output
 
 # KoBERT 모델 및 토크나이저 불러오기
-model = torch.load('./be/순서형회귀모델_v1.pth')
-model = model.to('cuda' if torch.cuda.is_available() else 'cpu')
-model.eval()
+device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+
+# valence 모델 불러오기
+valence_model = KoBERTMultitaskModel(n_classes=1)  # 출력은 1개의 값
+valence_model.load_state_dict(torch.load('./be/valence_model_state_dict.pth'))
+valence_model = valence_model.to(device)
+valence_model.eval()
+
+# arousal 모델 불러오기
+arousal_model = KoBERTMultitaskModel(n_classes=1)  # 출력은 1개의 값
+arousal_model.load_state_dict(torch.load('./be/arousal_model_state_dict.pth'))
+arousal_model = arousal_model.to(device)
+arousal_model.eval()
+
+# 토크나이저 불러오기
 tokenizer = BertTokenizer.from_pretrained('monologg/kobert')
+
 
 def split_sentences(paragraph):
     # 줄바꿈 문자를 공백으로 대체
@@ -55,12 +68,12 @@ def predict_emotion(model, tokenizer, sentence, device='cuda' if torch.cuda.is_a
     attention_mask = encoding['attention_mask'].to(device)
 
     with torch.no_grad():
-        valence_output, arousal_output = model(input_ids, attention_mask)
-        valence_prediction = torch.argmax(valence_output, dim=1).cpu().item()
-        arousal_prediction = torch.argmax(arousal_output, dim=1).cpu().item()
+        valence_output, _ = valence_model(input_ids, attention_mask)
+        _, arousal_output = arousal_model(input_ids, attention_mask)
 
-    valence_prediction = {0: -1, 1: 0, 2: 1}[valence_prediction]
-    arousal_prediction = {0: -1, 1: 0, 2: 1}[arousal_prediction]
+    # 예측 결과를 라운딩하여 -1, 0, 1 값으로 변환
+    valence_prediction = np.round(valence_output.cpu().numpy().flatten()[0])
+    arousal_prediction = np.round(arousal_output.cpu().numpy().flatten()[0])
 
     return (valence_prediction, arousal_prediction)
 
