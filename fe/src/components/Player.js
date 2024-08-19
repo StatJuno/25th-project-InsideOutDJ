@@ -234,26 +234,26 @@ function Player({
           </div>
         </section>
         <section>
-          <div className="h-[600px] w-full bg-teal-100 overflow-hidden z-20">
-            <Marquee speed={25} pauseOnHover={true} className="text-8xl font-black italic text-teal-800 mt-2 mb-4 subpixel-antialiased drop-shadow-[0_4px_4px_rgb(45, 212, 191)]">
+          <div className="h-[650px] w-full bg-teal-100 overflow-hidden z-20">
+            <Marquee speed={15} pauseOnHover={true} className="text-8xl font-black italic text-teal-800 mt-6 mb-4 subpixel-antialiased drop-shadow-[0_4px_4px_rgb(45, 212, 191)]">
               #나의추천노래 #InsideOutDJ #YBIGTA-신입프로젝트 
             </Marquee>
-            <Marquee pauseOnHover={true} className="text-8xl font-black italic text-teal-600 mt-4 tb-4 subpixel-antialiased drop-shadow-[0_4px_4px_rgb(45, 212, 191)]">
+            <Marquee speed={35} pauseOnHover={true} className="text-8xl font-black italic text-teal-600 mt-4 tb-4 subpixel-antialiased drop-shadow-[0_4px_4px_rgb(45, 212, 191)]">
               #감성 #스트리밍 #스포티파이 #내플레이리스트 #음악 #플레이어 
             </Marquee>
-            <Marquee pauseOnHover={true} className="text-8xl font-black italic text-teal-600 mt-4 tb-4 subpixel-antialiased drop-shadow-[0_4px_4px_rgb(45, 212, 191)]">
+            <Marquee speed={35} pauseOnHover={true} className="text-8xl font-black italic text-teal-600 mt-4 tb-6 subpixel-antialiased drop-shadow-[0_4px_4px_rgb(45, 212, 191)]">
             #평온 #희망 #노스탤지어 #외로움 #우울 #기쁨 #그리움 #화남 #열정 #흥분 #감동 #행복 #슬픔 #만족 #설렘 #두려움 
             </Marquee>
-            <Marquee speed={35} pauseOnHover={true} className="text-6xl font-bold italic text-teal-400 mt-4 tb-4 subpixel-antialiased drop-shadow-[0_4px_4px_rgb(45, 212, 191)]">
+            <Marquee speed={25} pauseOnHover={true} className="text-6xl font-bold italic text-teal-400 mt-6 tb-4 subpixel-antialiased drop-shadow-[0_4px_4px_rgb(45, 212, 191)]">
             #기쁨 #슬픔 #흥분 #평온 #노스탤지어 #열정 #그리움 #만족 #외로움 #감동 #우울 #희망 #두려움 #화남 #행복 #설렘 
             </Marquee>
-            <Marquee speed={35} pauseOnHover={true} className="text-6xl font-bold italic text-teal-400 mt-4 tb-4 subpixel-antialiased drop-shadow-[0_4px_4px_rgb(45, 212, 191)]">
+            <Marquee speed={25} pauseOnHover={true} className="text-6xl font-bold italic text-teal-400 mt-4 tb-6 subpixel-antialiased drop-shadow-[0_4px_4px_rgb(45, 212, 191)]">
               #트로트 #CCM #힙합 #레게 #클래식 #포크 음악 #컨트리 뮤직 #일렉트로닉 뮤직 #블루스 #재즈 #팝 #록 음악 #발라드 #디스코 #로큰롤 #전자 음악 
             </Marquee>
-            <Marquee speed={35} pauseOnHover={true} className="text-6xl font-bold italic text-white mt-4 tb-4 subpixel-antialiased drop-shadow-md">
+            <Marquee speed={25} pauseOnHover={true} className="text-6xl font-bold italic text-white mt-6 tb-4 subpixel-antialiased drop-shadow-md">
             #블루스 #일렉트로닉 뮤직 #트로트 #클래식 #록 음악 #발라드 #디스코 #재즈 #로큰롤 #CCM #레게 #전자 음악 #힙합 #팝 #포크 음악 #컨트리 뮤직 
             </Marquee>
-            <Marquee speed={35} pauseOnHover={true} className="text-6xl font-bold italic text-white mt-4 tb-4 subpixel-antialiased drop-shadow-md">
+            <Marquee speed={25} pauseOnHover={true} className="text-6xl font-bold italic text-white mt-4 tb-6 subpixel-antialiased drop-shadow-md">
             #레게 #발라드 #록 음악 #컨트리 뮤직 #블루스 #힙합 #전자 음악 #CCM #클래식 #포크 음악 #트로트 #일렉트로닉 뮤직 #팝 #로큰롤 #재즈 #디스코 
             </Marquee>
           </div>
