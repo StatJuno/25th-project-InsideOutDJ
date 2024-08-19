@@ -266,74 +266,23 @@ function App() {
     },
     pliName,
     onCreatePlaylist: async (diary, title) => {
-      const playlistName = `${title} - ${new Date().toLocaleDateString()}`;
       try {
-        // FastAPI 서버에 다이어리 데이터를 전송하여 추천된 노래 목록을 받아옴
+        // FastAPI 서버에 다이어리와 제목 데이터를 전송
         const response = await axios.post(
           "http://localhost:8000/generate_playlist",
-          diary, // diary 문자열을 직접 전송
           {
-            headers: {
-              "Content-Type": "text/plain", // Content-Type을 text/plain으로 설정
-            },
+            diary,
+            title,
+            token, // Spotify 토큰을 함께 보냄
           }
         );
 
-        // 추천된 노래 목록과 감정 분석 데이터를 추출
-        const recommendedSongs =
-          response.data.recommended_songs.recommended_songs;
-        const emotionAnalysis =
-          response.data.recommended_songs.emotion_analysis;
+        const playlistData = response.data; // FastAPI에서 반환한 데이터를 받음
+        console.log("Playlist created successfully!", playlistData);
 
-        console.log("Emotion Analysis:", emotionAnalysis);
-
-        const uris = recommendedSongs.map((song) => song.uri);
-
-        // Spotify 사용자 ID를 가져옴
-        const userResponse = await axios.get("https://api.spotify.com/v1/me", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-
-        const userId = userResponse.data.id;
-
-        // Spotify에서 플레이리스트 생성
-        const playlistResponse = await axios.post(
-          `https://api.spotify.com/v1/users/${userId}/playlists`,
-          {
-            name: playlistName,
-            description: "Playlist created based on diary entry",
-            public: false,
-          },
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-              "Content-Type": "application/json",
-            },
-          }
-        );
-
-        const newPliKey = playlistResponse.data.id; // 생성된 플레이리스트의 ID
-        setPliKey(newPliKey);
-        setPliName(playlistResponse.data.name);
-
-        // 생성된 플레이리스트에 트랙 추가
-        await axios.post(
-          `https://api.spotify.com/v1/playlists/${newPliKey}/tracks`,
-          {
-            uris: uris,
-            position: 0,
-          },
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-              "Content-Type": "application/json",
-            },
-          }
-        );
-
-        console.log("Playlist created successfully!");
+        // 필요한 경우 playlistData를 사용하여 상태를 업데이트
+        setPliKey(playlistData.playlist_id);
+        setPliName(playlistData.playlist_name);
       } catch (error) {
         console.error("플레이리스트 생성 중 오류 발생:", error);
         alert("플레이리스트 생성 중 오류가 발생했습니다.");

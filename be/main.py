@@ -1,6 +1,6 @@
 from fastapi import FastAPI, Body, Depends
 from motor.motor_asyncio import AsyncIOMotorClient
-
+import httpx  # HTTP 클라이언트 라이브러리
 from pydantic import BaseModel, Field
 from model_lib import recommend_songs
 from fastapi.middleware.cors import CORSMiddleware
@@ -124,9 +124,67 @@ app.add_middleware(
     allow_headers=["*"],  # 모든 헤더를 허용
 )
 
-@app.post("/generate_playlist")
-def generate_playlist(diary: str = Body(..., example="오늘 하루는 정말 힘들었어...")):
-    print(f"Received diary: {diary}")
-    songs = recommend_songs(diary)  # 모델과 토크나이저를 사용하여 추천된 노래 목록 생성
-    return {"recommended_songs": songs}
+# @app.post("/generate_playlist")
+# def generate_playlist(diary: str = Body(..., example="오늘 하루는 정말 힘들었어...")):
+#     print(f"Received diary: {diary}")
+#     songs = recommend_songs(diary)  # 모델과 토크나이저를 사용하여 추천된 노래 목록 생성
+#     return {"recommended_songs": songs}
 
+@app.post("/generate_playlist")
+async def generate_playlist(diary: str = Body(...), title: str = Body(...), token: str = Body(...)):
+    # 추천된 노래 목록과 감정 분석 데이터를 생성 (이미 구현된 recommend_songs 함수 사용)
+    songs_data = recommend_songs(diary)
+
+    # Spotify에서 사용자 ID를 가져옴
+    async with httpx.AsyncClient() as client:
+        user_response = await client.get(
+            "https://api.spotify.com/v1/me",
+            headers={"Authorization": f"Bearer {token}"}
+        )
+        user_response.raise_for_status()
+        user_data = user_response.json()
+        user_id = user_data["id"]
+
+    # Spotify에서 플레이리스트 생성
+    async with httpx.AsyncClient() as client:
+        playlist_response = await client.post(
+            f"https://api.spotify.com/v1/users/{user_id}/playlists",
+            json={
+                "name": title,
+                "description": "Playlist created based on diary entry",
+                "public": False
+            },
+            headers={"Authorization": f"Bearer {token}"}
+        )
+        playlist_response.raise_for_status()
+        playlist_data = playlist_response.json()
+
+    # 생성된 플레이리스트 ID와 이름
+    playlist_id = playlist_data["id"]
+    playlist_name = playlist_data["name"]
+
+    # 플레이리스트에 노래 추가
+    uris = [song["uri"] for song in songs_data["recommended_songs"]]
+    async with httpx.AsyncClient() as client:
+        await client.post(
+            f"https://api.spotify.com/v1/playlists/{playlist_id}/tracks",
+            json={"uris": uris},
+            headers={"Authorization": f"Bearer {token}"}
+        )
+
+    # 데이터베이스에 플레이리스트 정보 저장
+    playlist_record = {
+        "user_id": user_id,
+        "playlist_id": playlist_id,
+        "playlist_name": playlist_name,
+        "emotion_analysis": songs_data["emotion_analysis"],
+        "songs": songs_data["recommended_songs"]
+    }
+    await playlist_collection.insert_one(playlist_record)
+
+    # 클라이언트에 플레이리스트 정보 반환
+    return {
+        "playlist_id": playlist_id,
+        "playlist_name": playlist_name,
+        "emotion_analysis": songs_data["emotion_analysis"]
+    }
