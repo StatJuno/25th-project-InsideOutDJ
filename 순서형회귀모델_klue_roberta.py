@@ -28,7 +28,7 @@ device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 # -------------------------------
 # 데이터 로드 및 토크나이저 설정
 # -------------------------------
-df = pd.read_csv("감정데이터_v3.csv")
+df = pd.read_csv("감정데이터_v4.csv")
 raw_ds = Dataset.from_pandas(df)
 
 train_test_split = raw_ds.train_test_split(test_size=0.2, seed=SEED)
@@ -106,7 +106,7 @@ class WeightedRegressionTrainer(Trainer):
 # 정확도 계산 함수 설정
 # -------------------------------
 def compute_metrics_for_regression(p):
-    preds = np.round(p.predictions.flatten())  # 예측값을 -1, 0, 1로 라운딩
+    preds = np.clip(np.round(p.predictions.flatten()), -1, 1)  # 예측값을 -1, 0, 1로 라운딩 
     labels = p.label_ids
     
     accuracy = np.mean(preds == labels)  # 정확도 계산
@@ -114,12 +114,28 @@ def compute_metrics_for_regression(p):
     mse = mean_squared_error(labels, preds)
     mae = mean_absolute_error(labels, preds)
     r2 = r2_score(labels, preds)
+
+    # 각 클래스별 MAE 계산
+    unique_labels = np.unique(labels)
+    class_maes = []
     
+    for cls in unique_labels:
+        cls_mask = labels == cls
+        cls_preds = preds[cls_mask]
+        cls_labels = labels[cls_mask]
+        
+        cls_mae = mean_absolute_error(cls_labels, cls_preds)
+        class_maes.append(cls_mae)
+    
+    # Macro-Averaged MAE 계산
+    macro_mae = np.mean(class_maes)
+
     return {
         "mse": mse,
         "mae": mae,
         "r2": r2,
-        "accuracy": accuracy
+        "accuracy": accuracy,
+        "macro_mae": macro_mae
     }
 
 # -------------------------------
@@ -139,7 +155,8 @@ training_args_valence = TrainingArguments(
     load_best_model_at_end=True,
     weight_decay=WEIGHT_DECAY,
     warmup_steps=WARMUP_STEPS,
-    lr_scheduler_type=LR_SCHEDULER_TYPE
+    lr_scheduler_type=LR_SCHEDULER_TYPE,
+    metric_for_best_model="macro_mae"
 )
 
 model_valence = AutoModelForSequenceClassification.from_pretrained(MODEL_NAME, num_labels=1).to(device)
@@ -159,6 +176,9 @@ trainer_valence.train()
 torch.save(model_valence.state_dict(), f"{OUTPUT_DIR_VALENCE}_state_dict.pth")
 print(f"Valence model state_dict saved to {OUTPUT_DIR_VALENCE}_state_dict.pth")
 
+del model_valence
+torch.cuda.empty_cache()
+
 # -------------------------------
 # arousal 모델 학습 설정 및 학습
 # -------------------------------
@@ -175,7 +195,8 @@ training_args_arousal = TrainingArguments(
     load_best_model_at_end=True,
     weight_decay=WEIGHT_DECAY,
     warmup_steps=WARMUP_STEPS,
-    lr_scheduler_type=LR_SCHEDULER_TYPE
+    lr_scheduler_type=LR_SCHEDULER_TYPE,
+    metric_for_best_model="macro_mae"
 )
 
 model_arousal = AutoModelForSequenceClassification.from_pretrained(MODEL_NAME, num_labels=1).to(device)

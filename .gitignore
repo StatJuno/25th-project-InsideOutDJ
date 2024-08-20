@@ -33,5 +33,9 @@ be/__pycache__
 be/tracks_final.csv
 be/kobert_emotion_model.pth
 be/순서형회귀모델_v1.pth
+**/result_valence_state_dict.pth
+**/result_arousal_state_dict.pth
+**/.result_arousal
+**/.result_valence
 
 

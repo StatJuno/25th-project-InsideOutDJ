@@ -1,6 +1,6 @@
 import torch
 import torch.nn as nn
-from transformers import BertTokenizer, BertModel, BertForSequenceClassification
+from transformers import BertTokenizer, BertModel, BertForSequenceClassification, AutoModel, AutoTokenizer, AutoModelForSequenceClassification, AutoConfig
 import pandas as pd
 import numpy as np
 from sklearn.metrics.pairwise import cosine_similarity
@@ -12,39 +12,23 @@ import nltk
 from nltk.corpus import stopwords
 import re
 
-# KoBERTMultitaskModel 클래스 정의 (이전에 저장한 것과 동일하게 정의해야 함)
-class KoBERTMultitaskModel(nn.Module):
-    def __init__(self, n_classes, dropout_prob=0.3):
-        super(KoBERTMultitaskModel, self).__init__()
-        self.bert = BertModel.from_pretrained('monologg/kobert')
-        self.drop = nn.Dropout(p=dropout_prob)
-        self.out_valence = nn.Linear(self.bert.config.hidden_size, n_classes)
-        self.out_arousal = nn.Linear(self.bert.config.hidden_size, n_classes)
-
-    def forward(self, input_ids, attention_mask):
-        outputs = self.bert(input_ids=input_ids, attention_mask=attention_mask)
-        pooled_output = self.drop(outputs.pooler_output)
-        valence_output = self.out_valence(pooled_output)
-        arousal_output = self.out_arousal(pooled_output)
-        return valence_output, arousal_output
-
-# KoBERT 모델 및 토크나이저 불러오기
+# GPU/CPU 설정
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 # valence 모델 불러오기
-valence_model = KoBERTMultitaskModel(n_classes=1)  # 출력은 1개의 값
-valence_model.load_state_dict(torch.load('./be/valence_model_state_dict.pth'))
+valence_model = AutoModelForSequenceClassification.from_pretrained('klue/roberta-large', num_labels=1)
+valence_model.load_state_dict(torch.load('./be/result_valence_state_dict.pth'))
 valence_model = valence_model.to(device)
 valence_model.eval()
 
 # arousal 모델 불러오기
-arousal_model = KoBERTMultitaskModel(n_classes=1)  # 출력은 1개의 값
-arousal_model.load_state_dict(torch.load('./be/arousal_model_state_dict.pth'))
+arousal_model = AutoModelForSequenceClassification.from_pretrained('klue/roberta-large', num_labels=1)
+arousal_model.load_state_dict(torch.load('./be/result_arousal_state_dict.pth'))
 arousal_model = arousal_model.to(device)
 arousal_model.eval()
 
 # 토크나이저 불러오기
-tokenizer = BertTokenizer.from_pretrained('monologg/kobert')
+tokenizer = AutoTokenizer.from_pretrained('klue/roberta-large')
 
 
 def split_sentences(paragraph):
@@ -52,7 +36,7 @@ def split_sentences(paragraph):
     clean_paragraph = paragraph.replace('\n', ' ')
     return kss.split_sentences(clean_paragraph)
 
-def predict_emotion(model, tokenizer, sentence, device='cuda' if torch.cuda.is_available() else 'cpu'):
+def predict_emotion(valence_model, arousal_model, tokenizer, sentence, device='cuda' if torch.cuda.is_available() else 'cpu'):
     encoding = tokenizer.encode_plus(
         sentence,
         add_special_tokens=True,
@@ -68,12 +52,12 @@ def predict_emotion(model, tokenizer, sentence, device='cuda' if torch.cuda.is_a
     attention_mask = encoding['attention_mask'].to(device)
 
     with torch.no_grad():
-        valence_output, _ = valence_model(input_ids, attention_mask)
-        _, arousal_output = arousal_model(input_ids, attention_mask)
+        valence_output = valence_model(input_ids=input_ids, attention_mask=attention_mask)
+        arousal_output = arousal_model(input_ids=input_ids, attention_mask=attention_mask)
 
     # 예측 결과를 라운딩하여 -1, 0, 1 값으로 변환
-    valence_prediction = np.round(valence_output.cpu().numpy().flatten()[0])
-    arousal_prediction = np.round(arousal_output.cpu().numpy().flatten()[0])
+    valence_prediction = np.round(valence_output.logits.cpu().numpy().flatten()[0])
+    arousal_prediction = np.round(arousal_output.logits.cpu().numpy().flatten()[0])
 
     return (valence_prediction, arousal_prediction)
 
@@ -86,7 +70,7 @@ def calculate_paragraph_emotion(paragraph):
     print("\nAnalyzed Sentences and Their Emotions:")
 
     for sentence in sentences:
-        emotion_vector = predict_emotion(model, tokenizer, sentence)
+        emotion_vector = predict_emotion(valence_model, arousal_model, tokenizer, sentence)
         total_x += emotion_vector[0]
         total_y += emotion_vector[1]
 
@@ -116,11 +100,11 @@ def calculate_distance(x, y):
 # ~70% : 0.6352747241405549
 
 def filter_by_intensity(df, distance):
-    if distance <= 0.19:
+    if distance <= 0.2:
         intensity_label = 'neutral'
-    elif 0.19 < distance <= 0.41:
+    elif 0.2 < distance <= 0.5:
         intensity_label = 'low'
-    elif 0.41 < distance <= 0.64:
+    elif 0.5 < distance <= 0.8:
         intensity_label = 'medium'
     else:
         intensity_label = 'high'
@@ -147,7 +131,7 @@ def get_songs_by_emotion_and_intensity(df, normalized_emotion):
 nltk.download('stopwords')
 
 # 한국어 불용어 로드
-with open('be/stopwords-ko.txt', 'r', encoding='utf-8') as f:
+with open('./be/stopwords-ko.txt', 'r', encoding='utf-8') as f:
     korean_stopwords = f.read().splitlines()
 
 # 한국어 불용어를 텍스트에서 제거하는 함수
@@ -251,7 +235,7 @@ def recommend_songs(paragraph, df_path='./be/tracks_final.csv'):
 
 # 예시 문단 입력
 paragraph = """
-오늘 너무 행복했어. 정말 행복했어. 커피를 마셨어.
+오늘 너무 행복했어. 정말 행복했어. 커피를 마셨어. 하지만 과제가 많아서 짜증났어. 너무 화가 나!
 """
 
 # 노래 추천 실행
