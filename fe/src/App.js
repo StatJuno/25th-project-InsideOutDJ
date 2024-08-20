@@ -28,15 +28,15 @@ function App() {
   // 감정에 따른 색상을 반환하는 함수
   const getEmotionColor = (x, y) => {
     if (x >= 0 && y >= 0) {
-      return "bg-yellow-200";
+      return "yellow";
     } else if (x < 0 && y >= 0) {
-      return "bg-red-200";
+      return "red";
     } else if (x < 0 && y < 0) {
-      return "bg-blue-200";
+      return "blue";
     } else if (x >= 0 && y < 0) {
-      return "bg-green-200";
+      return "green";
     }
-    return "bg-gray-200"; // 기본 색상
+    return "gray"; // 기본 색상
   };
 
   const [token, setToken] = useState("");
@@ -48,7 +48,7 @@ function App() {
   const [track, setTrack] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [userInfo, setUserInfo] = useState(null);
-  const [emotion, setEmotion] = useState("");
+  const [emotion, setEmotion] = useState("teal");
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   // 유저 토큰 받아오기

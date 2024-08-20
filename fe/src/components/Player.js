@@ -18,11 +18,14 @@ const Wrapper = tw.div`
 `;
 
 const Ball = tw.div`
-    flex items-center justify-center min-w-96 w-96 h-96  rounded-full shadow-lg transition ease-in-out hover:animate-pulse
-`.withStyle(({ color }) => ({
-  backgroundColor: color,
-}));
-
+  m-auto
+  rounded-full 
+  bg-yellow-100 
+  shadow-lg 
+  absolute
+  z-30
+  pulsating-circle
+`;
 // const Ball = tw.div`
 // flex items-center justify-center min-w-96 w-96 h-96  rounded-full ${emotion} shadow-lg transition ease-in-out hover:animate-pulse
 // `;
@@ -142,9 +145,9 @@ function Player({
 
   // COLOR CHANGE
 
-  const [color, setColor] = useState('violet');
-
   const colorVariants = {
+    yellow: ['text-yellow-300', 'text-yellow-400', 'text-yellow-600', 'text-yellow-800'],
+    green: ['text-green-300', 'text-green-400', 'text-green-600', 'text-green-800'],
     blue: ['text-blue-300', 'text-blue-400', 'text-blue-600', 'text-blue-800'],
     red: ['text-red-300', 'text-red-400', 'text-red-600', 'text-red-800'],
     violet: ['text-violet-300', 'text-violet-400', 'text-violet-600 bg-violet-200', 'text-violet-800  bg-violet-200'],
@@ -152,6 +155,8 @@ function Player({
   }
 
   const bgColorVariants = {
+    yellow: ['bg-yellow-100', 'bg-yellow-200', 'bg-yellow-400', 'bg-yellow-800'],
+    green: ['bg-green-100', 'bg-green-200', 'bg-green-400', 'bg-green-800'],
     blue: ['bg-blue-100', 'bg-blue-200', 'bg-blue-400', 'bg-blue-800'],
     red: ['bg-red-100', 'bg-red-200', 'bg-red-400', 'bg-red-800'],
     violet: ['bg-violet-100', 'bg-violet-200', 'bg-violet-400', 'bg-violet-800'],
@@ -159,23 +164,25 @@ function Player({
   }
 
   const gradientColorVariants = {
+    yellow:['bg-gradient-to-r from-slate-400 from-[8%] via-yellow-200 via-45% to-yellow-500'],
+    green:['bg-gradient-to-r from-slate-400 from-[8%] via-green-200 via-45% to-green-500'],
     blue: ['bg-gradient-to-r from-slate-400 from-[8%] via-blue-200 via-45% to-blue-500'],
     red: ['bg-gradient-to-r from-slate-400 from-[8%] via-red-200 via-45% to-red-500'],
     violet: ['bg-gradient-to-r from-slate-400 from-[8%] via-violet-200 via-45% to-violet-500'],
     teal: ['bg-gradient-to-r from-slate-400 from-[8%] via-teal-200 via-45% to-teal-500']
   }
 
-  const text_300 = colorVariants[color][0];
-  const text_400 = colorVariants[color][1];
-  const text_600 = colorVariants[color][2];
-  const text_800 = colorVariants[color][3];
+  const text_300 = colorVariants[emotion][0];
+  const text_400 = colorVariants[emotion][1];
+  const text_600 = colorVariants[emotion][2];
+  const text_800 = colorVariants[emotion][3];
 
-  const bg_100 = bgColorVariants[color][0];
-  const bg_200 = bgColorVariants[color][1];
-  const bg_400 = bgColorVariants[color][2];
-  const bg_800 = bgColorVariants[color][3];
+  const bg_100 = bgColorVariants[emotion][0];
+  const bg_200 = bgColorVariants[emotion][1];
+  const bg_400 = bgColorVariants[emotion][2];
+  const bg_800 = bgColorVariants[emotion][3];
 
-  const gradientCoverBottom = gradientColorVariants[color][0];
+  const gradientCoverBottom = gradientColorVariants[emotion][0];
 
   // const text_300 = `text-${color}-300`;
   // const text_400 = `text-${color}-400`;
@@ -472,7 +479,7 @@ function Player({
                       progress={progress}
                       duration={duration}
                       seekTo={seekTo}
-                      color={color}
+                      color={emotion}
                       style="{{ box-shadow: 0px 0 0 4px rgb(124, 58, 237)}}"
                     ></SeekSlider>
                   </div>
