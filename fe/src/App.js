@@ -45,9 +45,12 @@ function App() {
   const [pliKey, setPliKey] = useState("");
   const [pliName, setPliName] = useState("");
   const [playlists, setPlaylists] = useState([]);
+  const [track, setTrack] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [userInfo, setUserInfo] = useState(null);
   const [emotion, setEmotion] = useState("");
+  const [currentTime, setCurrentTime] = useState(0);
+  const [duration, setDuration] = useState(0);
   // 유저 토큰 받아오기
   // navigate 정의
 
@@ -126,7 +129,7 @@ function App() {
         console.log("Spotify Web Playback SDK is ready");
         if (token) {
           const playerInstance = new window.Spotify.Player({
-            name: "Web Playback SDK Player",
+            name: "InsideOutDJ Webplayer",
             getOAuthToken: (cb) => {
               cb(token);
             },
@@ -145,7 +148,20 @@ function App() {
 
           playerInstance.addListener("player_state_changed", (state) => {
             console.log(state);
+            if (!state) {
+              return;
+            }
+
             setIsPlaying(!state.paused);
+            setCurrentTime(state.position / 1000);
+            setDuration(state.duration / 1000);
+
+            const currentTrack = state.track_window.current_track;
+            setTrack({
+              name: currentTrack.name,
+              artists: currentTrack.artists.map(artist => artist.name).join(', '),
+              album: currentTrack.album.images.map((image) => image.url) // Get the cover image URL
+            });
           });
 
           playerInstance.connect().then((success) => {
@@ -339,6 +355,16 @@ function App() {
     emotion,
     setEmotion,
     pliKey,
+    track: track,
+    seekTo: (progress) => {
+      const newTime = progress;
+      player.seek(newTime * 1000).then(() => {
+        console.log(`재생시간 ${newTime}로 설정되었습니다.`);
+      });
+      setCurrentTime(newTime);
+    },
+    currentTime: currentTime,
+    duration: duration
   };
   return (
     <AppRoutes
