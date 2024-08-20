@@ -238,7 +238,7 @@ function Player({
         </section>
         <section className="relative">
           <div 
-            className="w-full h-full absolute bg-gradient-to-b from-transparent to-slate-50 z-30 opacity-60"
+            className="w-full h-full absolute bg-gradient-to-b from-transparent from-30% to-slate-50 to-85% z-30 opacity-80"
             style={{pointerEvents: "none"}}>
           
           </div>
@@ -258,10 +258,10 @@ function Player({
             <Marquee speed={25} pauseOnHover={true} className="text-6xl font-bold italic text-teal-400 mt-4 tb-6 subpixel-antialiased drop-shadow-[0_4px_4px_rgb(45, 212, 191)]">
               #트로트 #CCM #힙합 #레게 #클래식 #포크 음악 #컨트리 뮤직 #일렉트로닉 뮤직 #블루스 #재즈 #팝 #록 음악 #발라드 #디스코 #로큰롤 #전자 음악&nbsp;
             </Marquee>
-            <Marquee speed={25} pauseOnHover={true} className="text-6xl font-bold italic text-white mt-6 tb-4 subpixel-antialiased drop-shadow-md">
+            <Marquee speed={25} pauseOnHover={true} className="text-6xl font-bold italic text-teal-300 mt-6 tb-4 subpixel-antialiased">
               #블루스 #일렉트로닉 뮤직 #트로트 #클래식 #록 음악 #발라드 #디스코 #재즈 #로큰롤 #CCM #레게 #전자 음악 #힙합 #팝 #포크 음악 #컨트리 뮤직&nbsp;
             </Marquee>
-            <Marquee speed={25} pauseOnHover={true} className="text-6xl font-bold italic text-white mt-4 tb-6 subpixel-antialiased drop-shadow-md">
+            <Marquee speed={25} pauseOnHover={true} className="text-6xl font-bold italic text-teal-300 mt-4 tb-6 subpixel-antialiased">
               #레게 #발라드 #록 음악 #컨트리 뮤직 #블루스 #힙합 #전자 음악 #CCM #클래식 #포크 음악 #트로트 #일렉트로닉 뮤직 #팝 #로큰롤 #재즈 #디스코&nbsp;
             </Marquee>
           </div>
