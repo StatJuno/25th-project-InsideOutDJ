@@ -6,6 +6,7 @@ import empty_album from "../assets/empty_album.png";
 import menu_icon from "../assets/menu.svg";
 import arrow_right_icon from "../assets/arrow-right.svg";
 import SeekSlider from "./SeekSlider";
+import empty_profile from "../assets/default_pf.jpg"
 
 const Wrapper = tw.div`
   max-w-[100%]
@@ -111,16 +112,18 @@ function Player({
     <div class="relative h-full">
       <button id="mainmenuicon_btn" className="m-4 absolute top-0 right-0" onClick={toggleSlideMenu}><img src={menu_icon} alt="Menu"/></button>
       <div
-        class="h-full absolute overflow-hidden bg-gray-900 top-0 right-0 m-0 fixed z-40 inset-y-0 bg-white border-r border-r-dashed border-r-neutral-200 fixed-start"
+        class="h-full absolute overflow-hidden bg-gray-900 top-0 right-0 m-0 fixed z-40 inset-y-0 border-r border-r-dashed border-r-neutral-200 fixed-start"
         id="menuslide-framer"
       >
         <div class={slideMenuSetting}>
-          <a id="mainmenuicon_close" className="m-4 absolute top-0 right-0" onClick={toggleSlideMenu}><img src={arrow_right_icon} alt="Close"/></a>
+          <a id="mainmenuicon_close" className="m-4 absolute top-0 right-0" onClick={toggleSlideMenu}>
+            <img src={arrow_right_icon} alt="Close"/>
+          </a>
           <div class="h-[96px] m-4 content-center">
             <a
-              class="transition-colors duration-200 ease-in"
-              href="https://www.loopple.com"
-            >
+                class="transition-colors duration-200 ease-in"
+                href="javascript:void(0)"
+              >
               <img
                 alt="Logo"
                 src="https://raw.githubusercontent.com/Loopple/loopple-public-assets/main/riva-dashboard-tailwind/img/logos/loopple.svg"
@@ -129,55 +132,53 @@ function Player({
             </a>
           </div>
 
-          <div class="px-8 py-5">
-            <div class="mr-5">
-              <div class="inline-block relative cursor-pointer rounded-[.95rem]">
-                <img
+          <div class="px-8 py-5 flex flex-row">
+            <div class="inline-block m-2 relative cursor-pointer rounded-[.95rem]">
+              <img
                   class="w-[40px] h-[40px] inline-block rounded-[.95rem]"
-                  src="https://raw.githubusercontent.com/Loopple/loopple-public-assets/main/riva-dashboard-tailwind/img/avatars/avatar1.jpg"
+                  src={empty_profile}
                   alt="avatar image"
                 />
-              </div>
             </div>
-            <div class="mr-2 ">
+            <div class="m-2">
               <a
                 href="javascript:void(0)"
                 class="dark:hover:text-primary hover:text-primary transition-colors duration-200 ease-in-out text-[1.075rem] font-medium dark:text-neutral-400/90 text-secondary-inverse"
               >
-                Robert Jason
+                김와빅
               </a>
               <span class="text-secondary-dark dark:text-stone-500 font-medium block text-[0.85rem]">
-                SEO Manager
+                노래듣는 돌고래
               </span>
             </div>
-          </div>
-          <a
-            class="text-base font-medium leading-normal text-center items-center cursor-pointer rounded-[.95rem] transition-colors duration-150 ease-in-out text-dark bg-transparent shadow-none border-0"
-            href="javascript:void(0)"
-          >
-            <span class="leading-none transition-colors duration-200 ease-in-out peer shrink-0 group-hover:text-primary text-secondary-dark">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke-width="1.5"
-                stroke="currentColor"
-                class="w-6 h-6"
+            <a
+              class="text-base font-medium leading-normal text-center items-center cursor-pointer rounded-[.95rem] transition-colors duration-150 ease-in-out text-dark bg-transparent shadow-none border-0"
+              href="javascript:void(0)"
               >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.324.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 011.37.49l1.296 2.247a1.125 1.125 0 01-.26 1.431l-1.003.827c-.293.24-.438.613-.431.992a6.759 6.759 0 010 .255c-.007.378.138.75.43.99l1.005.828c.424.35.534.954.26 1.43l-1.298 2.247a1.125 1.125 0 01-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.57 6.57 0 01-.22.128c-.331.183-.581.495-.644.869l-.213 1.28c-.09.543-.56.941-1.11.941h-2.594c-.55 0-1.02-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 01-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 01-1.369-.49l-1.297-2.247a1.125 1.125 0 01.26-1.431l1.004-.827c.292-.24.437-.613.43-.992a6.932 6.932 0 010-.255c.007-.378-.138-.75-.43-.99l-1.004-.828a1.125 1.125 0 01-.26-1.43l1.297-2.247a1.125 1.125 0 011.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.087.22-.128.332-.183.582-.495.644-.869l.214-1.281z"
-                ></path>
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-                ></path>
-              </svg>
-            </span>
-          </a>
-
+              <span class="leading-none transition-colors duration-200 ease-in-out peer shrink-0 group-hover:text-primary text-secondary-dark">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke-width="1.5"
+                  stroke="white"
+                  class="w-6 h-6 m-4"
+                >
+                  <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.324.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 011.37.49l1.296 2.247a1.125 1.125 0 01-.26 1.431l-1.003.827c-.293.24-.438.613-.431.992a6.759 6.759 0 010 .255c-.007.378.138.75.43.99l1.005.828c.424.35.534.954.26 1.43l-1.298 2.247a1.125 1.125 0 01-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.57 6.57 0 01-.22.128c-.331.183-.581.495-.644.869l-.213 1.28c-.09.543-.56.941-1.11.941h-2.594c-.55 0-1.02-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 01-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 01-1.369-.49l-1.297-2.247a1.125 1.125 0 01.26-1.431l1.004-.827c.292-.24.437-.613.43-.992a6.932 6.932 0 010-.255c.007-.378-.138-.75-.43-.99l-1.004-.828a1.125 1.125 0 01-.26-1.43l1.297-2.247a1.125 1.125 0 011.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.087.22-.128.332-.183.582-.495.644-.869l.214-1.281z"
+                    ></path>
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                  ></path>
+                </svg>
+              </span>
+            </a>
+          </div>
+          
           <div class="hidden border-b border-dashed lg:block dark:border-neutral-700/70 border-neutral-200"></div>
 
           <div class="relative pl-3 my-5 overflow-y-scroll">
@@ -236,25 +237,25 @@ function Player({
         <section>
           <div className="h-[650px] w-full bg-teal-100 overflow-hidden z-20">
             <Marquee speed={15} pauseOnHover={true} className="text-8xl font-black italic text-teal-800 mt-6 mb-4 subpixel-antialiased drop-shadow-[0_4px_4px_rgb(45, 212, 191)]">
-              #나의추천노래 #InsideOutDJ #YBIGTA-신입프로젝트 
+              #나의추천노래 #InsideOutDJ #YBIGTA-신입프로젝트&nbsp;
             </Marquee>
             <Marquee speed={35} pauseOnHover={true} className="text-8xl font-black italic text-teal-600 mt-4 tb-4 subpixel-antialiased drop-shadow-[0_4px_4px_rgb(45, 212, 191)]">
-              #감성 #스트리밍 #스포티파이 #내플레이리스트 #음악 #플레이어 
+              #감성 #스트리밍 #스포티파이 #내플레이리스트 #음악 #플레이어&nbsp;
             </Marquee>
             <Marquee speed={35} pauseOnHover={true} className="text-8xl font-black italic text-teal-600 mt-4 tb-6 subpixel-antialiased drop-shadow-[0_4px_4px_rgb(45, 212, 191)]">
-            #평온 #희망 #노스탤지어 #외로움 #우울 #기쁨 #그리움 #화남 #열정 #흥분 #감동 #행복 #슬픔 #만족 #설렘 #두려움 
+              #평온 #희망 #노스탤지어 #외로움 #우울 #기쁨 #그리움 #화남 #열정 #흥분 #감동 #행복 #슬픔 #만족 #설렘 #두려움&nbsp;
             </Marquee>
             <Marquee speed={25} pauseOnHover={true} className="text-6xl font-bold italic text-teal-400 mt-6 tb-4 subpixel-antialiased drop-shadow-[0_4px_4px_rgb(45, 212, 191)]">
-            #기쁨 #슬픔 #흥분 #평온 #노스탤지어 #열정 #그리움 #만족 #외로움 #감동 #우울 #희망 #두려움 #화남 #행복 #설렘 
+              #기쁨 #슬픔 #흥분 #평온 #노스탤지어 #열정 #그리움 #만족 #외로움 #감동 #우울 #희망 #두려움 #화남 #행복 #설렘&nbsp;
             </Marquee>
             <Marquee speed={25} pauseOnHover={true} className="text-6xl font-bold italic text-teal-400 mt-4 tb-6 subpixel-antialiased drop-shadow-[0_4px_4px_rgb(45, 212, 191)]">
-              #트로트 #CCM #힙합 #레게 #클래식 #포크 음악 #컨트리 뮤직 #일렉트로닉 뮤직 #블루스 #재즈 #팝 #록 음악 #발라드 #디스코 #로큰롤 #전자 음악 
+              #트로트 #CCM #힙합 #레게 #클래식 #포크 음악 #컨트리 뮤직 #일렉트로닉 뮤직 #블루스 #재즈 #팝 #록 음악 #발라드 #디스코 #로큰롤 #전자 음악&nbsp;
             </Marquee>
             <Marquee speed={25} pauseOnHover={true} className="text-6xl font-bold italic text-white mt-6 tb-4 subpixel-antialiased drop-shadow-md">
-            #블루스 #일렉트로닉 뮤직 #트로트 #클래식 #록 음악 #발라드 #디스코 #재즈 #로큰롤 #CCM #레게 #전자 음악 #힙합 #팝 #포크 음악 #컨트리 뮤직 
+              #블루스 #일렉트로닉 뮤직 #트로트 #클래식 #록 음악 #발라드 #디스코 #재즈 #로큰롤 #CCM #레게 #전자 음악 #힙합 #팝 #포크 음악 #컨트리 뮤직&nbsp;
             </Marquee>
             <Marquee speed={25} pauseOnHover={true} className="text-6xl font-bold italic text-white mt-4 tb-6 subpixel-antialiased drop-shadow-md">
-            #레게 #발라드 #록 음악 #컨트리 뮤직 #블루스 #힙합 #전자 음악 #CCM #클래식 #포크 음악 #트로트 #일렉트로닉 뮤직 #팝 #로큰롤 #재즈 #디스코 
+              #레게 #발라드 #록 음악 #컨트리 뮤직 #블루스 #힙합 #전자 음악 #CCM #클래식 #포크 음악 #트로트 #일렉트로닉 뮤직 #팝 #로큰롤 #재즈 #디스코&nbsp;
             </Marquee>
           </div>
         </section>
