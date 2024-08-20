@@ -115,17 +115,52 @@ function Player({
 
   // COLOR CHANGE
 
-  const text_300 = 'text-violet-300';
-  const text_400 = 'text-violet-400';
-  const text_600 = 'text-violet-600';
-  const text_800 = 'text-violet-800';
+  const [color, setColor] = useState('violet');
 
-  const bg_100 = 'bg-violet-100';
-  const bg_200 = 'bg-violet-200';
-  const bg_400 = 'bg-violet-400';
-  const bg_800 = 'bg-violet-800';
+  const colorVariants = {
+    blue: ['text-blue-300', 'text-blue-400', 'text-blue-600', 'text-blue-800'],
+    red: ['text-red-300', 'text-red-400', 'text-red-600', 'text-red-800'],
+    violet: ['text-violet-300', 'text-violet-400', 'text-violet-600 bg-violet-200', 'text-violet-800  bg-violet-200'],
+    teal: ['text-teal-300', 'text-teal-400', 'text-teal-600', 'text-teal-800']
+  }
 
-  const gradientCoverBottom = "bg-gradient-to-r from-slate-400 from-[8%] via-violet-200 via-45% to-violet-500";
+  const bgColorVariants = {
+    blue: ['bg-blue-100', 'bg-blue-200', 'bg-blue-400', 'bg-blue-800'],
+    red: ['bg-red-100', 'bg-red-200', 'bg-red-400', 'bg-red-800'],
+    violet: ['bg-violet-100', 'bg-violet-200', 'bg-violet-400', 'bg-violet-800'],
+    teal: ['bg-teal-100', 'bg-teal-200', 'bg-teal-400', 'bg-teal-800']
+  }
+
+  const gradientColorVariants = {
+    blue: ['bg-gradient-to-r from-slate-400 from-[8%] via-blue-200 via-45% to-blue-500'],
+    red: ['bg-gradient-to-r from-slate-400 from-[8%] via-red-200 via-45% to-red-500'],
+    violet: ['bg-gradient-to-r from-slate-400 from-[8%] via-violet-200 via-45% to-violet-500'],
+    teal: ['bg-gradient-to-r from-slate-400 from-[8%] via-teal-200 via-45% to-teal-500']
+  }
+
+  const text_300 = colorVariants[color][0];
+  const text_400 = colorVariants[color][1];
+  const text_600 = colorVariants[color][2];
+  const text_800 = colorVariants[color][3];
+
+  const bg_100 = bgColorVariants[color][0];
+  const bg_200 = bgColorVariants[color][1];
+  const bg_400 = bgColorVariants[color][2];
+  const bg_800 = bgColorVariants[color][3];
+
+  const gradientCoverBottom = gradientColorVariants[color][0];
+
+  // const text_300 = `text-${color}-300`;
+  // const text_400 = `text-${color}-400`;
+  // const text_600 = `text-${color}-600`;
+  // const text_800 = `text-${color}-800`;
+
+  // const bg_100 = `bg-${color}-100`;
+  // const bg_200 = `bg-${color}-200`;
+  // const bg_400 = `bg-${color}-400`;
+  // const bg_800 = `bg-${color}-800`;
+
+  // const gradientCoverBottom = `bg-gradient-to-r from-slate-400 from-[8%] via-${color}-200 via-45% to-${color}-500`;
 
   return (
     <div class="relative h-full">
@@ -407,6 +442,8 @@ function Player({
                       progress={progress}
                       duration={duration}
                       seekTo={seekTo}
+                      color={color}
+                      style="{{ box-shadow: 0px 0 0 4px rgb(124, 58, 237)}}"
                     ></SeekSlider>
                   </div>
                   <div class="flex justify-between mt-2 text-sm text-gray-600">

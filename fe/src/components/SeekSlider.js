@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import tw from "tailwind-styled-components";
 
-const SeekSlider = ({ progress, duration, seekTo}) => {
+const SeekSlider = ({ progress, duration, seekTo, color}) => {
 
     // SEEK SLIDER
 
@@ -19,8 +19,25 @@ const SeekSlider = ({ progress, duration, seekTo}) => {
 
     // COLOR CHANGE
 
-    const sliderClassName = 'bg-violet-400 absolute h-3.5 top-0 left-0 rounded-full mt-1 -mr-0 z-30';
-    const strokeClassName = 'stroke-violet-400';
+    const bgSliderColorVariants = {
+        blue: ['bg-blue-400 absolute h-3.5 top-0 left-0 rounded-full mt-1 -mr-0 z-30'],
+        red: ['bg-red-400 absolute h-3.5 top-0 left-0 rounded-full mt-1 -mr-0 z-30'],
+        violet: ['bg-violet-400 absolute h-3.5 top-0 left-0 rounded-full mt-1 -mr-0 z-30'],
+        teal: ['bg-teal-400 absolute h-3.5 top-0 left-0 rounded-full mt-1 -mr-0 z-30']
+      }
+
+      const strokeSliderColorVariants = {
+        blue: ['stroke-blue-400'],
+        red: ['stroke-red-400'],
+        violet: ['stroke-violet-400'],
+        teal: ['stroke-teal-400']
+      }
+
+    const sliderClassName = bgSliderColorVariants[color];
+    const strokeClassName = strokeSliderColorVariants[color];
+
+    // const sliderClassName = `bg-${color}-400 absolute h-3.5 top-0 left-0 rounded-full mt-1 -mr-0 z-30`;
+    // const strokeClassName = `stroke-${color}-400`;
 
     return (
         <div className="relative w-full">
