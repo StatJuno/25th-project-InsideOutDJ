@@ -1,6 +1,8 @@
 // src/components/Player.js
 import React, { useState, useEffect } from "react";
 import tw from "tailwind-styled-components";
+import { useNavigate } from "react-router-dom";
+import styled from "styled-components";
 import Marquee from "react-fast-marquee";
 import empty_album from "../assets/empty_album.png";
 import menu_icon from "../assets/menu.svg";
@@ -16,6 +18,16 @@ const Wrapper = tw.div`
 `;
 
 const Ball = tw.div`
+    flex items-center justify-center min-w-96 w-96 h-96  rounded-full shadow-lg transition ease-in-out hover:animate-pulse
+`.withStyle(({ color }) => ({
+  backgroundColor: color,
+}));
+
+// const Ball = tw.div`
+// flex items-center justify-center min-w-96 w-96 h-96  rounded-full ${emotion} shadow-lg transition ease-in-out hover:animate-pulse
+// `;
+const PlayListName = tw.h1`
+  text-3xl 
   m-auto
   rounded-full 
   bg-yellow-100 
@@ -43,7 +55,13 @@ const Slider = tw.input`
   opacity-100
   range range-xs
 `;
+const PlaylistBtn = tw.button`
+  fixed top-4 right-4 py-1 px-3 bg-gray-200 rounded-full text-sm border-1 shadow-lg transition ease-in-out hover:bg-green-100
+`;
 
+const DiaryBtn = tw.button`
+  fixed top-4 left-4 py-1 px-3 bg-gray-200 rounded-full text-sm border-1 shadow-lg transition ease-in-out hover:bg-yellow-100
+`;
 function Player({
   togglePlayPause,
   skipToNext,
@@ -54,10 +72,19 @@ function Player({
   pliName,
   track,
   isPlaying,
+  emotion,
   seekTo,
   currentTime,
   duration,
-}) {
+}) 
+{
+  const navigate = useNavigate();
+  const goToPlaylists = () => {
+    navigate("/playlists");
+  };
+  const goToDiary = () => {
+    navigate("/diary");
+  };
   const [progress, setProgress] = useState(0);
 
   // SPOTIFY PLAYER
@@ -163,7 +190,10 @@ function Player({
   // const gradientCoverBottom = `bg-gradient-to-r from-slate-400 from-[8%] via-${color}-200 via-45% to-${color}-500`;
 
   return (
+    
     <div class="relative h-full">
+      <PlaylistBtn onClick={goToPlaylists}>기억저장소 가기</PlaylistBtn>
+      <DiaryBtn onClick={goToDiary}>일기 쓰러 가기</DiaryBtn>
       <button id="mainmenuicon_btn" className="m-4 absolute top-0 right-0" onClick={toggleSlideMenu}><img src={menu_icon} alt="Menu"/></button>
       <div
         class="h-full absolute overflow-hidden bg-gray-900 top-0 right-0 m-0 fixed z-40 inset-y-0 border-r border-r-dashed border-r-neutral-200 fixed-start"

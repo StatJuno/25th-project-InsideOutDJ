@@ -1,0 +1,20 @@
+myenv
+__pycache__
+
+# Git 관련 파일을 무시합니다.
+.git
+.gitignore
+
+# 로그 파일을 무시합니다.
+*.log
+
+# 환경 설정 파일을 무시합니다. (예: 환경 변수)
+.env
+
+# 빌드 결과물을 무시합니다.
+build
+dist
+
+# Docker 관련 파일을 무시합니다.
+Dockerfile
+docker-compose.yaml

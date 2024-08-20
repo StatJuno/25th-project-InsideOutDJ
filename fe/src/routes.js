@@ -4,8 +4,9 @@ import Login from "./components/Login";
 import Diary from "./components/Diary";
 import Loading from "./components/Loading";
 import Player from "./components/Player";
+import PlaylistsPage from "./components/PlaylistsPage";
 
-function AppRoutes({ playerProps, authProps, loadingProps }) {
+function AppRoutes({ playerProps, authProps, loadingProps, token, userInfo }) {
   return (
     <Router>
       <Routes>
@@ -17,6 +18,12 @@ function AppRoutes({ playerProps, authProps, loadingProps }) {
         <Route path="/loading" element={<Loading {...playerProps} />} />
         {/* loadingProps 전달 */}
         <Route path="/player" element={<Player {...playerProps} />} />
+        <Route
+          path="/playlists"
+          element={
+            <PlaylistsPage token={token} userInfo={userInfo} {...playerProps} />
+          }
+        />
       </Routes>
     </Router>
   );
