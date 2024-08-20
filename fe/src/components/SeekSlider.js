@@ -2,6 +2,9 @@ import React, { useEffect, useState, useRef } from "react";
 import tw from "tailwind-styled-components";
 
 const SeekSlider = ({ progress, duration, seekTo}) => {
+
+    // SEEK SLIDER
+
     const fullWidth = useRef(null);
     // Calculate the width percentage
     const [sliderWidth, setSliderWidth] = useState(0);
@@ -13,10 +16,15 @@ const SeekSlider = ({ progress, duration, seekTo}) => {
             setSliderWidth((progress / duration) * fullWidth.current.offsetWidth);
         }
     }, [progress, duration]);
-  
+
+    // COLOR CHANGE
+
+    const sliderClassName = 'bg-violet-400 absolute h-3.5 top-0 left-0 rounded-full mt-1 -mr-0 z-30';
+    const strokeClassName = 'stroke-violet-400';
+
     return (
         <div className="relative w-full">
-           <input class="w-full h-3 accent-teal-400
+           <input class="w-full h-3
                         bg-gray-200 rounded-lg opacity-0
                         cursor-pointer appearance-none"
                         type="range"
@@ -28,10 +36,12 @@ const SeekSlider = ({ progress, duration, seekTo}) => {
                           seekTo(e.target.value);
                         }}
                       />
+            
             <div 
-                className="absolute h-3.5 top-0 left-0 bg-teal-400 rounded-full mt-1 -mr-0 z-30"
+                className={sliderClassName}
                 style={{ width: width, pointerEvents: 'none'}}
-            ></div>
+            >
+            </div>
             <div ref={fullWidth}
                 className="absolute h-3.5 w-full bg-gray-200 rounded-full -mt-5 z-20"
                 style={{ pointerEvents: 'none'}}
@@ -39,7 +49,10 @@ const SeekSlider = ({ progress, duration, seekTo}) => {
             <svg 
                 className="absolute mt-[-22px] z-40 w-[20px] h-[20px] cursor-pointer -translate-x-[50%]"
                 style={{left: thumbPos, pointerEvents: "none"}}>
-                    <circle cx="10" cy="10" r="8" stroke="#2dd4bf" stroke-width="3.6" fill="#FFF"/>
+                    <circle className={strokeClassName} cx="10" cy="10" r="8" stroke-width="3.6" fill="#FFF"/>
+                    <div> 
+                        
+                    </div>
             </svg>
             {/* <div style={{left: thumbPos, pointerEvents: "none"}}>
                 className="absolute" >

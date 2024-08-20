@@ -37,7 +37,6 @@ const Slider = tw.input`
   w-24
   h-2
   bg-gray-300
-  accent-teal-500
   rounded-lg
   cursor-pointer
   transition-opacity
@@ -60,6 +59,8 @@ function Player({
   duration,
 }) {
   const [progress, setProgress] = useState(0);
+
+  // SPOTIFY PLAYER
 
   const getCurrentProgress = () => {
     // Replace this with your actual logic to get the current progress
@@ -86,6 +87,8 @@ function Player({
     return `${minutes}:${secs < 10 ? "0" : ""}${secs}`;
   };
 
+  // SLIDE MENU
+
   const [slideMenuToggled, setSlideMenuToggled] = useState(false);
   const [slideMenuSetting, setSlideMenuSetting] = useState('hidden w-0')
 
@@ -109,6 +112,20 @@ function Player({
       }, 200);
     }
   }, [slideMenuToggled]);
+
+  // COLOR CHANGE
+
+  const text_300 = 'text-violet-300';
+  const text_400 = 'text-violet-400';
+  const text_600 = 'text-violet-600';
+  const text_800 = 'text-violet-800';
+
+  const bg_100 = 'bg-violet-100';
+  const bg_200 = 'bg-violet-200';
+  const bg_400 = 'bg-violet-400';
+  const bg_800 = 'bg-violet-800';
+
+  const gradientCoverBottom = "bg-gradient-to-r from-slate-400 from-[8%] via-violet-200 via-45% to-violet-500";
 
   return (
     <div class="relative h-full">
@@ -232,8 +249,10 @@ function Player({
       </div>
       <Wrapper>
         <section>
-          <div className="h-6 bg-teal-800">
+          <div className={bg_800}>
+            <div className="h-6">
 
+            </div>
           </div>
         </section>
         <section className="relative">
@@ -242,31 +261,47 @@ function Player({
             style={{pointerEvents: "none"}}>
           
           </div>
-          <div className="h-[650px] w-full bg-teal-100 overflow-hidden z-20">
-            <Marquee speed={15} pauseOnHover={true} className="text-8xl font-black italic text-teal-800 mt-6 mb-4 subpixel-antialiased drop-shadow-[0_4px_4px_rgb(45, 212, 191)]">
-              #나의추천노래 #InsideOutDJ #YBIGTA-신입프로젝트&nbsp;
-            </Marquee>
-            <Marquee speed={35} pauseOnHover={true} className="text-8xl font-black italic text-teal-600 mt-4 tb-4 subpixel-antialiased drop-shadow-[0_4px_4px_rgb(45, 212, 191)]">
-              #감성 #스트리밍 #스포티파이 #내플레이리스트 #음악 #플레이어&nbsp;
-            </Marquee>
-            <Marquee speed={35} pauseOnHover={true} className="text-8xl font-black italic text-teal-600 mt-4 tb-6 subpixel-antialiased drop-shadow-[0_4px_4px_rgb(45, 212, 191)]">
-              #평온 #희망 #노스탤지어 #외로움 #우울 #기쁨 #그리움 #화남 #열정 #흥분 #감동 #행복 #슬픔 #만족 #설렘 #두려움&nbsp;
-            </Marquee>
-            <Marquee speed={25} pauseOnHover={true} className="text-6xl font-bold italic text-teal-400 mt-6 tb-4 subpixel-antialiased drop-shadow-[0_4px_4px_rgb(45, 212, 191)]">
-              #기쁨 #슬픔 #흥분 #평온 #노스탤지어 #열정 #그리움 #만족 #외로움 #감동 #우울 #희망 #두려움 #화남 #행복 #설렘&nbsp;
-            </Marquee>
-            <Marquee speed={25} pauseOnHover={true} className="text-6xl font-bold italic text-teal-400 mt-4 tb-6 subpixel-antialiased drop-shadow-[0_4px_4px_rgb(45, 212, 191)]">
-              #트로트 #CCM #힙합 #레게 #클래식 #포크 음악 #컨트리 뮤직 #일렉트로닉 뮤직 #블루스 #재즈 #팝 #록 음악 #발라드 #디스코 #로큰롤 #전자 음악&nbsp;
-            </Marquee>
-            <Marquee speed={25} pauseOnHover={true} className="text-6xl font-bold italic text-teal-300 mt-6 tb-4 subpixel-antialiased">
-              #블루스 #일렉트로닉 뮤직 #트로트 #클래식 #록 음악 #발라드 #디스코 #재즈 #로큰롤 #CCM #레게 #전자 음악 #힙합 #팝 #포크 음악 #컨트리 뮤직&nbsp;
-            </Marquee>
-            <Marquee speed={25} pauseOnHover={true} className="text-6xl font-bold italic text-teal-300 mt-4 tb-6 subpixel-antialiased">
-              #레게 #발라드 #록 음악 #컨트리 뮤직 #블루스 #힙합 #전자 음악 #CCM #클래식 #포크 음악 #트로트 #일렉트로닉 뮤직 #팝 #로큰롤 #재즈 #디스코&nbsp;
-            </Marquee>
+          <div className={bg_100}>
+            <div className="h-[650px] w-full overflow-hidden z-20">
+              <div className={text_800}>
+                <Marquee speed={15} pauseOnHover={true} className="text-8xl font-black italic mt-6 mb-4 subpixel-antialiased drop-shadow-[0_4px_4px_rgb(45, 212, 191)]">
+                  #나의추천노래 #InsideOutDJ #YBIGTA-신입프로젝트&nbsp;
+                </Marquee>
+              </div>
+              <div className={text_600}>
+                <Marquee speed={35} pauseOnHover={true} className="text-8xl font-black italic mt-4 tb-4 subpixel-antialiased drop-shadow-[0_4px_4px_rgb(45, 212, 191)]">
+                  #감성 #스트리밍 #스포티파이 #내플레이리스트 #음악 #플레이어&nbsp;
+                </Marquee>
+              </div>
+              <div className={text_600}>
+                <Marquee speed={35} pauseOnHover={true} className="text-8xl font-black italic mt-4 tb-6 subpixel-antialiased drop-shadow-[0_4px_4px_rgb(45, 212, 191)]">
+                  #평온 #희망 #노스탤지어 #외로움 #우울 #기쁨 #그리움 #화남 #열정 #흥분 #감동 #행복 #슬픔 #만족 #설렘 #두려움&nbsp;
+                </Marquee>
+              </div>
+              <div className={text_400}>
+                <Marquee speed={25} pauseOnHover={true} className="text-6xl font-bold italic mt-6 tb-4 subpixel-antialiased drop-shadow-[0_4px_4px_rgb(45, 212, 191)]">
+                  #기쁨 #슬픔 #흥분 #평온 #노스탤지어 #열정 #그리움 #만족 #외로움 #감동 #우울 #희망 #두려움 #화남 #행복 #설렘&nbsp;
+                </Marquee>
+              </div>
+              <div className={text_400}>
+                <Marquee speed={25} pauseOnHover={true} className="text-6xl font-bold italic mt-4 tb-6 subpixel-antialiased drop-shadow-[0_4px_4px_rgb(45, 212, 191)]">
+                  #트로트 #CCM #힙합 #레게 #클래식 #포크 음악 #컨트리 뮤직 #일렉트로닉 뮤직 #블루스 #재즈 #팝 #록 음악 #발라드 #디스코 #로큰롤 #전자 음악&nbsp;
+                </Marquee>
+              </div>
+              <div className={text_300}>
+                <Marquee speed={25} pauseOnHover={true} className="text-6xl font-bold italic mt-6 tb-4 subpixel-antialiased">
+                  #블루스 #일렉트로닉 뮤직 #트로트 #클래식 #록 음악 #발라드 #디스코 #재즈 #로큰롤 #CCM #레게 #전자 음악 #힙합 #팝 #포크 음악 #컨트리 뮤직&nbsp;
+                </Marquee>
+              </div>
+              <div className={text_300}>
+                <Marquee speed={25} pauseOnHover={true} className="text-6xl font-bold italic mt-4 tb-6 subpixel-antialiased">
+                  #레게 #발라드 #록 음악 #컨트리 뮤직 #블루스 #힙합 #전자 음악 #CCM #클래식 #포크 음악 #트로트 #일렉트로닉 뮤직 #팝 #로큰롤 #재즈 #디스코&nbsp;
+                </Marquee>
+              </div>
+            </div>
           </div>
         </section>
-        <section class="bg-gradient-to-r from-slate-400 from-[8%] via-teal-200 via-45% to-teal-500">
+        <section class={gradientCoverBottom}>
           <PlayList>{pliName}</PlayList>
           <Ball></Ball>
           <div class="text-center m-auto w-full">
@@ -397,13 +432,15 @@ function Player({
                         d="M19.114 5.636a9 9 0 0 1 0 12.728M16.463 8.288a5.25 5.25 0 0 1 0 7.424M6.75 8.25l4.72-4.72a.75.75 0 0 1 1.28.53v15.88a.75.75 0 0 1-1.28.53l-4.72-4.72H4.51c-.88 0-1.704-.507-1.938-1.354A9.009 9.009 0 0 1 2.25 12c0-.83.112-1.633.322-2.396C2.806 8.756 3.63 8.25 4.51 8.25H6.75Z"
                       />
                     </svg>
-                    <Slider
-                      type="range"
-                      min="0"
-                      max="1"
-                      step="0.01"
-                      onChange={(e) => setVolume(e.target.value)}
-                    />
+                    <div>
+                      <Slider
+                        type="range"
+                        min="0"
+                        max="1"
+                        step="0.01"
+                        onChange={(e) => setVolume(e.target.value)}
+                      />
+                    </div>
                   </div>
                   <div class="mt-2 mb-2 w-full flex flex-row items-center gap-2 text-sm text-gray-600">
                     <label class="relative inline-flex cursor-pointer">
@@ -415,12 +452,12 @@ function Player({
                       <label for="switch-2" class="hidden"></label>
                       <div
                         class="relative w-9 h-5 bg-gray-200 peer-focus:outline-none 
-                      peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-teal-100 
+                      peer-focus:ring-4 peer-focus:ring-violet-300 dark:peer-focus:ring-gray-100 
                       rounded-full peer dark:bg-gray-100 peer-checked:after:translate-x-full 
                       rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white 
                       after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white 
                       after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 
-                      after:transition-all dark:border-gray-00 peer-checked:bg-teal-500"
+                      after:transition-all dark:border-gray-00 peer-checked:bg-gray-500"
                       ></div>
                     </label>
                     <div className="content-center">
