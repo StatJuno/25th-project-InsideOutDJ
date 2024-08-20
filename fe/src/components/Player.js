@@ -92,7 +92,9 @@ function Player({
   // toggle the slide menu with animation
   const toggleSlideMenu = () => {
     setSlideMenuToggled(!slideMenuToggled);
+  }
 
+  useEffect(() => {
     if(slideMenuToggled) {
       setSlideMenuSetting('w-0')
         
@@ -106,7 +108,7 @@ function Player({
         setSlideMenuSetting('hidden')
       }, 200);
     }
-  }
+  }, [slideMenuToggled]);
 
   return (
     <div class="relative h-full">
@@ -234,7 +236,12 @@ function Player({
 
           </div>
         </section>
-        <section>
+        <section className="relative">
+          <div 
+            className="w-full h-full absolute bg-gradient-to-b from-transparent to-slate-50 z-30 opacity-60"
+            style={{pointerEvents: "none"}}>
+          
+          </div>
           <div className="h-[650px] w-full bg-teal-100 overflow-hidden z-20">
             <Marquee speed={15} pauseOnHover={true} className="text-8xl font-black italic text-teal-800 mt-6 mb-4 subpixel-antialiased drop-shadow-[0_4px_4px_rgb(45, 212, 191)]">
               #나의추천노래 #InsideOutDJ #YBIGTA-신입프로젝트&nbsp;
