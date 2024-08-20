@@ -16,14 +16,12 @@ import re
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 # valence 모델 불러오기
-valence_model = AutoModelForSequenceClassification.from_pretrained('klue/roberta-large', num_labels=1)
-valence_model.load_state_dict(torch.load('./be/result_valence_state_dict.pth'))
+valence_model = AutoModelForSequenceClassification.from_pretrained('./checkpoint-25060', num_labels=1)
 valence_model = valence_model.to(device)
 valence_model.eval()
 
 # arousal 모델 불러오기
-arousal_model = AutoModelForSequenceClassification.from_pretrained('klue/roberta-large', num_labels=1)
-arousal_model.load_state_dict(torch.load('./be/result_arousal_state_dict.pth'))
+arousal_model = AutoModelForSequenceClassification.from_pretrained('./checkpoint-43855', num_labels=1)
 arousal_model = arousal_model.to(device)
 arousal_model.eval()
 
@@ -131,7 +129,7 @@ def get_songs_by_emotion_and_intensity(df, normalized_emotion):
 nltk.download('stopwords')
 
 # 한국어 불용어 로드
-with open('./be/stopwords-ko.txt', 'r', encoding='utf-8') as f:
+with open('./stopwords-ko.txt', 'r', encoding='utf-8') as f:
     korean_stopwords = f.read().splitlines()
 
 # 한국어 불용어를 텍스트에서 제거하는 함수
@@ -187,7 +185,7 @@ def get_comment_by_emotion_and_intensity(quadrant, intensity):
     else:
         return comments.get((quadrant, intensity), "기분이 복잡하셨던 것 같아요.")
 
-def recommend_songs(paragraph, df_path='./be/tracks_final.csv'):
+def recommend_songs(paragraph, df_path='./tracks_final.csv'):
     # 감정 분석을 수행하고, 그 결과를 반환할 데이터에 포함시킴
     normalized_emotion = calculate_paragraph_emotion(paragraph)
     

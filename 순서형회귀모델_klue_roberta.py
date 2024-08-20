@@ -9,7 +9,7 @@ import numpy as np
 # 학습 파라미터 설정
 # -------------------------------
 MODEL_NAME = "klue/roberta-large"
-LEARNING_RATE = 1e-5
+LEARNING_RATE = 2e-5
 MAX_LENGTH = 64
 BATCH_SIZE = 16
 EPOCHS = 10
