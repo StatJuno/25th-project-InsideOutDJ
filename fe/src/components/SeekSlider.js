@@ -20,6 +20,8 @@ const SeekSlider = ({ progress, duration, seekTo, color}) => {
     // COLOR CHANGE
 
     const bgSliderColorVariants = {
+        yellow: ['bg-yellow-400 absolute h-3.5 top-0 left-0 rounded-full mt-1 -mr-0 z-30'],
+        green: ['bg-green-400 absolute h-3.5 top-0 left-0 rounded-full mt-1 -mr-0 z-30'],
         blue: ['bg-blue-400 absolute h-3.5 top-0 left-0 rounded-full mt-1 -mr-0 z-30'],
         red: ['bg-red-400 absolute h-3.5 top-0 left-0 rounded-full mt-1 -mr-0 z-30'],
         violet: ['bg-violet-400 absolute h-3.5 top-0 left-0 rounded-full mt-1 -mr-0 z-30'],
@@ -27,6 +29,8 @@ const SeekSlider = ({ progress, duration, seekTo, color}) => {
       }
 
       const strokeSliderColorVariants = {
+        yellow: ['stroke-yellow-400'],
+        green: ['stroke-green-400'],
         blue: ['stroke-blue-400'],
         red: ['stroke-red-400'],
         violet: ['stroke-violet-400'],

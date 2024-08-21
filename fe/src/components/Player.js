@@ -25,6 +25,9 @@ const Ball = tw.div`
   absolute
   z-30
   pulsating-circle
+  before:bg-slate-400
+  after:bg-slate-400
+  after:opacity-40
 `;
 // const Ball = tw.div`
 // flex items-center justify-center min-w-96 w-96 h-96  rounded-full ${emotion} shadow-lg transition ease-in-out hover:animate-pulse
@@ -47,23 +50,27 @@ const Track = tw.div`
 m-4
 `;
 
-const Slider = tw.input`
-  appearance-none
-  w-24
-  h-2
-  bg-gray-300
-  rounded-lg
-  cursor-pointer
-  transition-opacity
-  opacity-100
-  range range-xs
+const Slider = styled.input`
+  appearance: none;
+  background-color: #DDD;
+  border-radius: 25px;
+
+  &::-webkit-slider-thumb {
+    width: 12px;
+    height: 12px;
+    -webkit-appearance: none;
+    background: #FFF;
+    box-shadow: ${(props) => props.boxShadow};
+    border-radius: 50%;
+    z-index: 50;
+  }
 `;
 const PlaylistBtn = tw.button`
-  fixed top-4 right-4 py-1 px-3 bg-gray-200 rounded-full text-sm border-1 shadow-lg transition ease-in-out hover:bg-green-100
+  z-30 fixed top-4 right-4 md:right-20 py-1 px-3 bg-gray-200 rounded-full text-sm border-1 shadow-lg transition ease-in-out hover:bg-green-100
 `;
 
 const DiaryBtn = tw.button`
-  fixed top-4 left-4 py-1 px-3 bg-gray-200 rounded-full text-sm border-1 shadow-lg transition ease-in-out hover:bg-yellow-100
+  z-30 fixed top-4 left-4 py-1 px-3 bg-gray-200 rounded-full text-sm border-1 shadow-lg transition ease-in-out hover:bg-yellow-100
 `;
 function Player({
   togglePlayPause,
@@ -75,12 +82,13 @@ function Player({
   pliName,
   track,
   isPlaying,
-  emotion,
+  //emotion,
   seekTo,
   currentTime,
   duration,
 }) 
 {
+  const emotion = "yellow";
   const navigate = useNavigate();
   const goToPlaylists = () => {
     navigate("/playlists");
@@ -184,6 +192,41 @@ function Player({
 
   const gradientCoverBottom = gradientColorVariants[emotion][0];
 
+  const ballColors = {
+    yellow: ['before:bg-yellow-400 after:bg-yellow-400'],
+    green: ['before:bg-green-400 after:bg-green-400'],
+    blue: ['before:bg-blue-400 after:bg-blue-400'],
+    red: ['before:bg-red-400 after:bg-red-400'],
+    violet: ['before:bg-violet-400 after:bg-violet-400'],
+    teal: ['before:bg-teal-400 after:bg-teal-400']
+  }
+
+  // SLIDER COLOR
+
+  const [boxShadowColor, setBoxShadowColor] = useState('rgba(0, 0, 0, 0.2)');
+  
+  useEffect(() => {
+    // A simple function to determine the color based on the input string
+    const determineColor = (str) => {
+      switch (str) {
+        case 'yellow':
+          return '0px 0 0 4px #facc15';
+        case 'green':
+          return '0px 0 0 4px #4ade80';
+        case 'blue':
+          return '0px 0 0 4px #60a5fa';
+        case 'red':
+          return '0px 0 0 4px #f87171';
+        case 'violet':
+          return '0px 0 0 4px #a78bfa';
+        default:
+          return '0px 0 0 4px #2dd4bf';
+      }
+    };
+
+    setBoxShadowColor(determineColor(emotion));
+  }, [emotion]);
+
   // const text_300 = `text-${color}-300`;
   // const text_400 = `text-${color}-400`;
   // const text_600 = `text-${color}-600`;
@@ -201,7 +244,7 @@ function Player({
     <div class="relative h-full">
       <PlaylistBtn onClick={goToPlaylists}>기억저장소 가기</PlaylistBtn>
       <DiaryBtn onClick={goToDiary}>일기 쓰러 가기</DiaryBtn>
-      <button id="mainmenuicon_btn" className="m-4 absolute top-0 right-0" onClick={toggleSlideMenu}><img src={menu_icon} alt="Menu"/></button>
+      <button id="mainmenuicon_btn" className="z-30 m-4 absolute top-10 md:top-0 right-0" onClick={toggleSlideMenu}><img src={menu_icon} alt="Menu"/></button>
       <div
         class="h-full absolute overflow-hidden bg-gray-900 top-0 right-0 m-0 fixed z-40 inset-y-0 border-r border-r-dashed border-r-neutral-200 fixed-start"
         id="menuslide-framer"
@@ -375,7 +418,7 @@ function Player({
         </section>
         <section class={gradientCoverBottom}>
           <PlayList>{pliName}</PlayList>
-          <Ball></Ball>
+          <Ball className={ballColors[emotion][0]}></Ball>
           <div class="text-center m-auto w-full">
             <div class="flex flex-col justify-center gap-6 w-full max-h-[600px]">
               <div class="mt-4 z-30">
@@ -512,7 +555,9 @@ function Player({
                         min="0"
                         max="1"
                         step="0.01"
+                        defaultValue={0.5}
                         onChange={(e) => setVolume(e.target.value)}
+                        boxShadow={boxShadowColor}
                       />
                     </div>
                   </div>
