@@ -4,7 +4,7 @@ __pycache__
 # Git 관련 파일을 무시합니다.
 .git
 .gitignore
-
+.env
 # 로그 파일을 무시합니다.
 *.log
 

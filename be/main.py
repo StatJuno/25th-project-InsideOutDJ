@@ -2,19 +2,24 @@ from fastapi import FastAPI, Body, Depends
 from motor.motor_asyncio import AsyncIOMotorClient
 import httpx  # HTTP 클라이언트 라이브러리
 from pydantic import BaseModel, Field
-from model_lib import recommend_songs
+from model2 import recommend_songs
 from fastapi.middleware.cors import CORSMiddleware
 from bson import ObjectId
 from typing import Optional, List
+import os
+from dotenv import load_dotenv
+# .env 파일에서 환경 변수를 로드합니다.
 
+load_dotenv()
 
 app = FastAPI()
 
 
 # MongoDB 연결 설정
-MONGO_DETAILS = "mongodb://localhost:27017"
-client = AsyncIOMotorClient(MONGO_DETAILS)
-database = client.inside_out_dj
+# 환경 변수에서 MongoDB URI 불러오기
+mongodb_uri = os.getenv("MONGODB_URI")
+client = AsyncIOMotorClient(mongodb_uri)
+database = client['inside-out-dj']
 user_collection = database.get_collection("users")
 playlist_collection = database.get_collection("playlists")
 

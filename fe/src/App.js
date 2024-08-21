@@ -27,13 +27,13 @@ function App() {
 
   // 감정에 따른 색상을 반환하는 함수
   const getEmotionColor = (x, y) => {
-    if (x >= 0 && y >= 0) {
+    if (x > 0 && y > 0) {
       return "yellow";
-    } else if (x < 0 && y >= 0) {
+    } else if (x < 0 && y > 0) {
       return "red";
     } else if (x < 0 && y < 0) {
       return "blue";
-    } else if (x >= 0 && y < 0) {
+    } else if (x > 0 && y < 0) {
       return "green";
     }
     return "gray"; // 기본 색상
@@ -85,7 +85,7 @@ function App() {
 
         const userData = userResponse.data;
         setUserInfo(userData);
-        // console.log(userData);
+        console.log(userData);
 
         // 이메일을 기반으로 백엔드에 해당 사용자가 있는지 확인
         const checkUserResponse = await axios.get(
@@ -159,8 +159,10 @@ function App() {
             const currentTrack = state.track_window.current_track;
             setTrack({
               name: currentTrack.name,
-              artists: currentTrack.artists.map(artist => artist.name).join(', '),
-              album: currentTrack.album.images.map((image) => image.url) // Get the cover image URL
+              artists: currentTrack.artists
+                .map((artist) => artist.name)
+                .join(", "),
+              album: currentTrack.album.images.map((image) => image.url), // Get the cover image URL
             });
           });
 
@@ -363,8 +365,11 @@ function App() {
       });
       setCurrentTime(newTime);
     },
+    userInfo: userInfo,
     currentTime: currentTime,
-    duration: duration
+    duration: duration,
+    setPliName,
+    setEmotion,
   };
   return (
     <AppRoutes

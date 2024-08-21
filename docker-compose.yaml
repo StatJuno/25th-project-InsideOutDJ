@@ -12,7 +12,7 @@ services:
       - ./fe:/workspace
       - ./assets:/workspace/assets
       - /workspace/node_modules
-    command: npm start
+    command: npm run start
     tty: true
 
   backend:

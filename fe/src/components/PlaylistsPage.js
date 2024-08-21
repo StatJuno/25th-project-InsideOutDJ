@@ -72,26 +72,37 @@ function PlaylistsPage({
   };
 
   const getEmotionLabel = (x, y) => {
-    if (x > 0 && y > 0) return "기쁨 (Joy)";
+    if (x > 0 && y >= 0) return "기쁨 (Joy)";
     if (x > 0 && y < 0) return "평온 (Calmness)";
     if (x < 0 && y > 0) return "분노 (Anger)";
-    if (x < 0 && y < 0) return "우울 (Sadness)";
+    if (x < 0 && y <= 0) return "우울 (Sadness)";
     return "중립 (Neutral)";
   };
 
   const getEmotionColor = (x, y) => {
-    if (x >= 0 && y >= 0) {
-      return "bg-yellow-200";
-    } else if (x < 0 && y >= 0) {
-      return "bg-red-200";
-    } else if (x < 0 && y < 0) {
-      return "bg-blue-200";
-    } else if (x >= 0 && y < 0) {
-      return "bg-green-200";
+    if (x > 0 && y >= 0) {
+      return "yellow";
+    } else if (x < 0 && y > 0) {
+      return "red";
+    } else if (x < 0 && y <= 0) {
+      return "blue";
+    } else if (x > 0 && y < 0) {
+      return "green";
     }
-    return "bg-gray-200"; // 기본 색상
+    return "gray"; // 기본 색상
   };
-
+  const getEmotionColor2 = (x, y) => {
+    if (x > 0 && y >= 0) {
+      return "bg-yellow-100";
+    } else if (x < 0 && y > 0) {
+      return "bg-red-100";
+    } else if (x < 0 && y <= 0) {
+      return "bg-blue-100";
+    } else if (x > 0 && y < 0) {
+      return "bg-green-100";
+    }
+    return "bg-gray-100"; // 기본 색상
+  };
   const goToDiary = () => {
     navigate("/diary");
   };
@@ -103,11 +114,11 @@ function PlaylistsPage({
       <PlaylistList>
         {playlists.map((playlist) => (
           <PlaylistItem
-            className={getEmotionColor(
+            className={getEmotionColor2(
               playlist.emotion_analysis.normalized_emotion.x,
               playlist.emotion_analysis.normalized_emotion.y
             )}
-            key={playlist.id}
+            key={playlist.playlist_id}
             onClick={() =>
               handlePlaylistClick(
                 playlist.playlist_id,
