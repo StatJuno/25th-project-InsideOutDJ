@@ -17,8 +17,11 @@ COPY requirements.txt ./
 # requirements.txt에 정의된 패키지 설치
 RUN pip install --no-cache-dir -r requirements.txt
 
-# 애플리케이션 코드 복사
+# 애플리케이션 코드 복사\
+COPY checkpoint-25060 ./checkpoint-25060
+COPY checkpoint-43855 ./checkpoint-43855
 COPY . .
+
 
 # Uvicorn을 사용하여 FastAPI 애플리케이션 실행
 # Dockerfile에서 CMD 명령어 수정

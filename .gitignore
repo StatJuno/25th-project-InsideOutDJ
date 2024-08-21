@@ -31,8 +31,11 @@ be/myenv
 be/__pycache__
 
 be/tracks_final.csv
-be/kobert_emotion_model.pth
+be/result_arousal_state_dict.pth
+be/result_valence_state_dict.pth
 be/순서형회귀모델_v1.pth
 be/assets
+be/checkpoint-25060
+be/checkpoint-43855
 
 
