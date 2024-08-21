@@ -203,6 +203,7 @@ function Player({
     blue: ['before:bg-blue-400 after:bg-blue-400'],
     red: ['before:bg-red-400 after:bg-red-400'],
     violet: ['before:bg-violet-400 after:bg-violet-400'],
+    gray: ["before:bg-gray-400 after:bg-gray-400"],
     teal: ['before:bg-teal-400 after:bg-teal-400']
   }
 
@@ -223,6 +224,8 @@ function Player({
           return '0px 0 0 4px #f87171';
         case 'violet':
           return '0px 0 0 4px #a78bfa';
+        case 'gray':
+          return '0px 0 0 4px #9ca3af';
         default:
           return '0px 0 0 4px #2dd4bf';
       }
