@@ -7,6 +7,7 @@ import tw from "tailwind-styled-components";
 import menu_icon from "../assets/menu.svg";
 import arrow_right_icon from "../assets/arrow-right.svg";
 import empty_profile from "../assets/default_pf.jpg";
+import inside_out_png from "../assets/inside_out.png"
 
 const MenuSlideContainer = tw.div`
   h-full absolute overflow-hidden bg-gray-900 top-0 right-0 m-0 fixed z-40 inset-y-0 border-r border-r-dashed border-r-neutral-200 fixed-start
@@ -78,20 +79,20 @@ const MenuSlide = ({
         >
           <img src={arrow_right_icon} alt="Close" />
         </a>
-        <div className="h-[96px] m-4 content-center">
+        <div className="h-[96px] m-2 content-center">
           <a
             className="transition-colors duration-200 ease-in"
             href="javascript:void(0)"
           >
             <img
               alt="Logo"
-              src="https://raw.githubusercontent.com/Loopple/loopple-public-assets/main/riva-dashboard-tailwind/img/logos/loopple.svg"
-              className="inline"
+              src={inside_out_png}
+              className="w-[60px] h-[60px] inline-block"
             />
           </a>
         </div>
 
-        <div className="px-8 py-5 flex flex-row">
+        <div className="pl-3 py-5 flex flex-row basis-10">
           <div className="inline-block m-2 relative cursor-pointer rounded-[.95rem]">
             <img
               className="w-[40px] h-[40px] inline-block rounded-[.95rem]"
@@ -115,7 +116,7 @@ const MenuSlide = ({
         <div className="hidden border-b border-dashed lg:block dark:border-neutral-700/70 border-neutral-200"></div>
 
         <SlideContent>
-          <div className="m-4">
+          <div className="m-2">
             <span className="font-semibold text-[0.95rem] uppercase dark:text-neutral-500/80 text-secondary-dark text-white">
               플레이리스트
             </span>
@@ -140,7 +141,7 @@ const MenuSlide = ({
               </PlaylistItem>
             ))
           ) : (
-            <div className="m-4 text-white">플레이리스트가 없습니다.</div>
+            <div className="m-2 text-white">플레이리스트가 없습니다.</div>
           )}
         </SlideContent>
       </div>
