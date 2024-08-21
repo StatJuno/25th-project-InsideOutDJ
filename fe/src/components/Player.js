@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
 import tw from "tailwind-styled-components";
 import { useNavigate } from "react-router-dom";
-import Marquee from "react-fast-marquee";
+import styled from "styled-components";
 import empty_album from "../assets/empty_album.png";
 import menu_icon from "../assets/menu.svg";
 import MenuSlide from "./MenuSlide";
 import SeekSlider from "./SeekSlider";
+import MarqueeWall from "./MarqueeWall";
 
 // const Ball = tw.div`
 //   m-auto
@@ -17,7 +18,8 @@ import SeekSlider from "./SeekSlider";
 //   pulsating-circle
 // `;
 const Wrapper = tw.div`max-w-[100%] md:max-w-[70%] m-auto relative`;
-const Ball = tw.div`
+const Ball = tw.div `m-auto rounded-full bg-yellow-100 shadow-lg absolutez-30 pulsating-circle before:bg-slate-400 after:bg-slate-400 after:opacity-40`
+const SpinningBall = tw.div`
   m-auto w-[24rem] h-[24rem] rounded-full shadow-lg absolute z-30 animate-spin-slow
   flex items-center justify-center pt-4 pb-4 pl-2 pr-2 mt-16 ml-8
   
@@ -27,11 +29,24 @@ const OutBox = tw.div`flex items-center justify-center flex-col min-w-96 w-full 
 const PlayListName = tw.h1`text-3xl m-auto rounded-full bg-yellow-100 shadow-lg absolute z-30 pulsating-circle`;
 const PlayList = tw.h1`text-3xl subpixel-antialiased italic text-slate-600 `;
 const TrackContainer = tw.div`m-4`;
-const SliderInput = tw.input`appearance-none w-24 h-2 bg-gray-300 rounded-lg cursor-pointer transition-opacity opacity-100 range range-xs`;
-const PlaylistBtn = tw.button`fixed top-4 right-20 py-1 px-3 bg-gray-200 rounded-full text-sm border-1 shadow-lg transition ease-in-out hover:bg-green-100`;
-const DiaryBtn = tw.button`fixed top-4 left-4 py-1 px-3 bg-gray-200 rounded-full text-sm border-1 shadow-lg transition ease-in-out hover:bg-yellow-100`;
-const MenuButton = tw.button`fixed top-4 right-4 py-1 px-3 text-sm transition ease-in-out`;
-const AlbumContainer = tw.article`bg-white p-8 rounded-lg shadow-md min-w-60 max-w-80 m-auto relative -top-80`;
+const SliderInput = styled.input`
+appearance: none;
+background-color: #DDD;
+border-radius: 25px;
+
+&::-webkit-slider-thumb {
+  width: 12px;
+  height: 12px;
+  -webkit-appearance: none;
+  background: #FFF;
+  box-shadow: ${(props) => props.boxShadow};
+  border-radius: 50%;
+  z-index: 30;
+}`
+const PlaylistBtn = tw.button`z-40 fixed top-4 right-4 md:right-20 py-1 px-3 bg-gray-200 rounded-full text-sm border-1 shadow-lg transition ease-in-out hover:bg-green-100`;
+const DiaryBtn = tw.button`z-40 fixed top-4 left-4 py-1 px-3 bg-gray-200 rounded-full text-sm border-1 shadow-lg transition ease-in-out hover:bg-yellow-100`;
+const MenuButton = tw.button`z-40 m-4 fixed top-10 md:top-0 right-0`;
+const AlbumContainer = tw.article`bg-white p-8 rounded-lg shadow-md min-w-60 max-w-80 m-auto relative -top-40`;
 const AlbumImage = tw.img`w-full mb-4 rounded-lg shadow-lg shadow-gray-200`;
 const AlbumTitle = tw.h2`text-xl font-semibold mt-4 mb-2`;
 const AlbumArtist = tw.p`text-gray-600 text-sm mt-2 mb-4`;
@@ -151,27 +166,13 @@ function Player({
   };
 
   const gradientColorVariants = {
-    yellow: [
-      "bg-gradient-to-r from-slate-400 from-[8%] via-yellow-200 via-45% to-yellow-500",
-    ],
-    green: [
-      "bg-gradient-to-r from-slate-400 from-[8%] via-green-200 via-45% to-green-500",
-    ],
-    blue: [
-      "bg-gradient-to-r from-slate-400 from-[8%] via-blue-200 via-45% to-blue-500",
-    ],
-    red: [
-      "bg-gradient-to-r from-slate-400 from-[8%] via-red-200 via-45% to-red-500",
-    ],
-    gray: [
-      "bg-gradient-to-r from-slate-400 from-[8%] via-gray-200 via-45% to-gray-500",
-    ],
-    violet: [
-      "bg-gradient-to-r from-slate-400 from-[8%] via-violet-200 via-45% to-violet-500",
-    ],
-    teal: [
-      "bg-gradient-to-r from-slate-400 from-[8%] via-teal-200 via-45% to-teal-500",
-    ],
+    yellow: ["bg-gradient-to-r from-slate-400 from-[8%] via-yellow-200 via-45% to-yellow-500"],
+    green: ["bg-gradient-to-r from-slate-400 from-[8%] via-green-200 via-45% to-green-500"],
+    blue: ["bg-gradient-to-r from-slate-400 from-[8%] via-blue-200 via-45% to-blue-500"],
+    red: ["bg-gradient-to-r from-slate-400 from-[8%] via-red-200 via-45% to-red-500"],
+    gray: ["bg-gradient-to-r from-slate-400 from-[8%] via-gray-200 via-45% to-gray-500"],
+    violet: ["bg-gradient-to-r from-slate-400 from-[8%] via-violet-200 via-45% to-violet-500"],
+    teal: ["bg-gradient-to-r from-slate-400 from-[8%] via-teal-200 via-45% to-teal-500"],
   };
 
   const gradientColorVariants2 = {
@@ -180,24 +181,63 @@ function Player({
     blue: ["bg-gradient-to-r from-blue-200 via-white to-blue-300"],
     green: ["bg-gradient-to-r from-green-200 via-white to-green-300"],
     gray: ["bg-gradient-to-r from-gray-200 via-white to-gray-300"],
-    teal: ["bg-gradient-to-r from-gray-200 via-white to-gray-300"],
+    teal: ["bg-gradient-to-r from-teal-200 via-white to-teal-300"],
   };
 
   const text_300 = colorVariants[emotion][0];
   const text_400 = colorVariants[emotion][1];
   const text_600 = colorVariants[emotion][2];
   const text_800 = colorVariants[emotion][3];
+
   const bg_100 = bgColorVariants[emotion][0];
+  const bg_200 = bgColorVariants[emotion][1];
+  const bg_400 = bgColorVariants[emotion][2];
+  const bg_800 = bgColorVariants[emotion][3];
+
   const gradientCoverBottom = gradientColorVariants[emotion][0];
+
+  const ballColors = {
+    yellow: ['before:bg-yellow-400 after:bg-yellow-400'],
+    green: ['before:bg-green-400 after:bg-green-400'],
+    blue: ['before:bg-blue-400 after:bg-blue-400'],
+    red: ['before:bg-red-400 after:bg-red-400'],
+    violet: ['before:bg-violet-400 after:bg-violet-400'],
+    teal: ['before:bg-teal-400 after:bg-teal-400']
+  }
+
   const gradientCoverBottom2 = gradientColorVariants2[emotion][0];
+
+  const [boxShadowColor, setBoxShadowColor] = useState('rgba(0, 0, 0, 0.2)');
+  
+  useEffect(() => {
+    const determineColor = (str) => {
+      switch (str) {
+        case 'yellow':
+          return '0px 0 0 4px #facc15';
+        case 'green':
+          return '0px 0 0 4px #4ade80';
+        case 'blue':
+          return '0px 0 0 4px #60a5fa';
+        case 'red':
+          return '0px 0 0 4px #f87171';
+        case 'violet':
+          return '0px 0 0 4px #a78bfa';
+        default:
+          return '0px 0 0 4px #2dd4bf';
+      }
+    };
+
+    setBoxShadowColor(determineColor(emotion));
+  }, [emotion]);
+
   return (
-    <OutBox>
-      <div className="relative h-100vh">
-        <PlaylistBtn onClick={goToPlaylists}>기억저장소 가기</PlaylistBtn>
-        <DiaryBtn onClick={goToDiary}>일기 쓰러 가기</DiaryBtn>
-        <MenuButton onClick={toggleSlideMenu}>
-          <img src={menu_icon} alt="Menu" />
-        </MenuButton>
+    <div class="overflow-x-hidden">
+      <PlaylistBtn onClick={goToPlaylists}>기억저장소 가기</PlaylistBtn>
+      <DiaryBtn onClick={goToDiary}>일기 쓰러 가기</DiaryBtn>
+      <MenuButton className="z-40 m-4 fixed top-10 md:top-0 right-0" onClick={toggleSlideMenu}>
+        <img src={menu_icon} alt="Menu" />
+      </MenuButton>
+      <div className="relative h-full">
         <MenuSlide
           toggleSlideMenu={toggleSlideMenu}
           slideMenuSetting={slideMenuSetting}
@@ -208,91 +248,36 @@ function Player({
         />
         <Wrapper>
           <section>
-            <div className={bg_100}>
+            <div className={bg_800}>
               <div className="h-6"></div>
             </div>
           </section>
           <section className="relative">
-            <div
-              className="w-full h-full absolute bg-gradient-to-b from-transparent from-30% to-slate-50 to-85% z-30 opacity-80"
-              style={{ pointerEvents: "none" }}
-            ></div>
-            <div className={bg_100}>
-              <div className="max-h-[600px] w-full overflow-hidden z-20">
-                <div className={text_800}>
-                  <Marquee
-                    speed={15}
-                    pauseOnHover={true}
-                    className="text-8xl font-black italic mt-3 mb-2 subpixel-antialiased drop-shadow-[0_4px_4px_rgb(45, 212, 191)]"
-                  >
-                    #나의추천노래 #InsideOutDJ #YBIGTA-신입프로젝트&nbsp;
-                  </Marquee>
-                </div>
-                <div className={text_600}>
-                  <Marquee
-                    speed={35}
-                    pauseOnHover={true}
-                    className="text-8xl font-black italic mt-2 tb-2 subpixel-antialiased drop-shadow-[0_4px_4px_rgb(45, 212, 191)]"
-                  >
-                    #감성 #스트리밍 #스포티파이 #내플레이리스트 #음악
-                    #플레이어&nbsp;
-                  </Marquee>
-                </div>
-                <div className={text_600}>
-                  <Marquee
-                    speed={35}
-                    pauseOnHover={true}
-                    className="text-8xl font-black italic mt-2 tb-3 subpixel-antialiased drop-shadow-[0_4px_4px_rgb(45, 212, 191)]"
-                  >
-                    #평온 #희망 #노스탤지어 #외로움 #우울 #기쁨 #그리움 #화남
-                    #열정 #흥분 #감동 #행복 #슬픔 #만족 #설렘 #두려움&nbsp;
-                  </Marquee>
-                </div>
-                <div className={text_400}>
-                  <Marquee
-                    speed={25}
-                    pauseOnHover={true}
-                    className="text-6xl font-bold italic mt-3 tb-2 subpixel-antialiased drop-shadow-[0_4px_4px_rgb(45, 212, 191)]"
-                  >
-                    #기쁨 #슬픔 #흥분 #평온 #노스탤지어 #열정 #그리움 #만족
-                    #외로움 #감동 #우울 #희망 #두려움 #화남 #행복 #설렘&nbsp;
-                  </Marquee>
-                </div>
-                <div className={text_300}>
-                  <Marquee
-                    speed={25}
-                    pauseOnHover={true}
-                    className="text-6xl font-bold italic mt-3 tb-2 subpixel-antialiased drop-shadow-[0_4px_4px_rgb(45, 212, 191)]"
-                  >
-                    #외로움 #감동 #우울 #희망 #두려움 #화남 #행복 #설렘 #기쁨
-                    #슬픔 #흥분 #평온 #노스탤지어 #열정 #그리움 #만족 &nbsp;
-                  </Marquee>
-                </div>
-              </div>
-            </div>
+            <MarqueeWall bg_100={bg_100} text_300={text_300} text_400={text_400} text_600={text_600} text_800={text_800}></MarqueeWall>
           </section>
 
           <section className={gradientCoverBottom}>
-            <Ball className={gradientCoverBottom2}>
+            <SpinningBall className={gradientCoverBottom2}>
               <PlayList>{pliName}</PlayList>
-            </Ball>
+            </SpinningBall>
+            <Ball className={ballColors[emotion][0]}></Ball>
 
             <div className="text-center m-auto w-full">
               <div className="flex flex-col justify-center gap-6 w-full max-h-[600px]">
-                <div className="mt-8 z-30">
+                <div className="mt-4 z-30">
                   <AlbumContainer>
                     {track ? (
-                      <>
+                      <div>
                         <AlbumImage src={track.album[0]} alt="Album cover" />
                         <AlbumTitle>{track.name}</AlbumTitle>
                         <AlbumArtist>{track.artists}</AlbumArtist>
-                      </>
+                      </div>
                     ) : (
-                      <>
+                      <div>
                         <AlbumImage src={empty_album} alt="Empty album" />
                         <AlbumTitle>No track is currently playing</AlbumTitle>
                         <AlbumArtist>Please wait</AlbumArtist>
-                      </>
+                      </div>
                     )}
                     <ButtonContainer>
                       <IconButton onClick={skipToPrevious}>
@@ -375,7 +360,7 @@ function Player({
                     </TimeContainer>
                   </AlbumContainer>
                 </div>
-                <div className="mb-4 z-30 relative -top-80">
+                <div className="mb-4 z-30 relative -top-40">
                   <div className="bg-white p-8 rounded-lg shadow-md flex flex-row gap-4 items-center justify-center text-center min-w-80 max-w-80 m-auto">
                     <VolumeContainer>
                       <svg
@@ -397,7 +382,9 @@ function Player({
                         min="0"
                         max="1"
                         step="0.01"
+                        defaultValue={0.5}
                         onChange={(e) => setVolume(e.target.value)}
+                        boxShadow={boxShadowColor}
                       />
                     </VolumeContainer>
                     <VolumeContainer>
@@ -421,7 +408,7 @@ function Player({
           </section>
         </Wrapper>
       </div>
-    </OutBox>
+    </div>
   );
 }
 

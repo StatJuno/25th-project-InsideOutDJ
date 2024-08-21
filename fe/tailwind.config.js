@@ -11,7 +11,7 @@ module.exports = {
         body: ["ui-sans-serif", "sans-serif"],
       },
       animation: {
-        "spin-slow": "spin 3s linear infinite", // 기존 1s를 3s로 변경하여 속도를 줄임
+        "spin-slow": "spin 10s linear infinite", // 기존 1s를 10s로 변경하여 속도를 줄임
       },
     },
   },
