@@ -18,20 +18,20 @@ function App() {
   ].join(" ");
   // getEmotionLabel 함수
   const getEmotionLabel = (x, y) => {
-    if (x > 0 && y >= 0) return "기쁨 (Joy)";
+    if (x > 0 && y > 0) return "기쁨 (Joy)";
     if (x > 0 && y < 0) return "평온 (Calmness)";
     if (x < 0 && y > 0) return "분노 (Anger)";
-    if (x < 0 && y <= 0) return "우울 (Sadness)";
+    if (x < 0 && y < 0) return "우울 (Sadness)";
     return "중립 (Neutral)";
   };
 
   // 감정에 따른 색상을 반환하는 함수
   const getEmotionColor = (x, y) => {
-    if (x > 0 && y >= 0) {
+    if (x > 0 && y > 0) {
       return "yellow";
     } else if (x < 0 && y > 0) {
       return "red";
-    } else if (x < 0 && y <= 0) {
+    } else if (x < 0 && y < 0) {
       return "blue";
     } else if (x > 0 && y < 0) {
       return "green";

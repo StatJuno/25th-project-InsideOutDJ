@@ -93,17 +93,6 @@ const SeekSlider = ({ progress, duration, seekTo, color }) => {
         />
         <div></div>
       </svg>
-      {/* <div style={{left: thumbPos, pointerEvents: "none"}}>
-                className="absolute" >
-                
-                {/* <div 
-                    className="absolute w-5 h-5 -top-[23px] bg-teal-400 rounded-full z-30"
-                ></div>
-                <div 
-                    className="absolute w-3 h-3 -top-[23px] left-1 bg-white rounded-full mt-1 z-40"
-                ></div>
-                
-            </div> */}
     </div>
   );
 };
