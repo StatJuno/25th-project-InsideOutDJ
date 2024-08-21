@@ -9,6 +9,15 @@ import MenuSlide from "./MenuSlide";
 import SeekSlider from "./SeekSlider";
 import MarqueeWall from "./MarqueeWall";
 
+// const Ball = tw.div`
+//   m-auto
+//   rounded-full
+//   bg-yellow-100
+//   shadow-lg
+//   absolute
+//   z-30
+//   pulsating-circle
+// `;
 const Wrapper = tw.div`max-w-[100%] md:max-w-[70%] m-auto relative`;
 const Ball = tw.div `m-auto rounded-full bg-yellow-100 shadow-lg absolutez-30 pulsating-circle before:bg-slate-400 after:bg-slate-400 after:opacity-40`
 const SpinningBall = tw.div`
@@ -112,42 +121,50 @@ function Player({
     return `${minutes}:${secs < 10 ? "0" : ""}${secs}`;
   };
 
-  const getCurrentProgress = () => {
-    // Replace this with your actual logic to get the current progress
-    return currentTime; // Simulated progress value
+  const colorVariants = {
+    yellow: [
+      "text-yellow-300",
+      "text-yellow-400",
+      "text-yellow-600",
+      "text-yellow-800",
+    ],
+    green: [
+      "text-green-300",
+      "text-green-400",
+      "text-green-600",
+      "text-green-800",
+    ],
+    blue: ["text-blue-300", "text-blue-400", "text-blue-600", "text-blue-800"],
+    red: ["text-red-300", "text-red-400", "text-red-600", "text-red-800"],
+    violet: [
+      "text-violet-300",
+      "text-violet-400",
+      "text-violet-600",
+      "text-violet-800",
+    ],
+    gray: ["text-gray-300", "text-gray-400", "text-gray-600", "text-gray-800"],
+    teal: ["text-teal-300", "text-teal-400", "text-teal-600", "text-teal-800"],
   };
 
-  useEffect(() => {
-    let interval;
-    setProgress(getCurrentProgress()); // Update progress on pause
-
-    if (isPlaying) {
-      interval = setInterval(() => {
-        setProgress((prevValue) => prevValue + 1);
-      }, 1000); // Adjust the interval as needed
-    } else {
-      clearInterval(interval);
-    }
-    return () => clearInterval(interval);
-  }, [isPlaying, currentTime, skipToNext, skipToPrevious]);
-
-  const colorVariants = {
-    yellow: ['text-yellow-300', 'text-yellow-400', 'text-yellow-600', 'text-yellow-800'],
-    green: ['text-green-300', 'text-green-400', 'text-green-600', 'text-green-800'],
-    blue: ['text-blue-300', 'text-blue-400', 'text-blue-600', 'text-blue-800'],
-    red: ['text-red-300', 'text-red-400', 'text-red-600', 'text-red-800'],
-    violet: ['text-violet-300', 'text-violet-400', 'text-violet-600 bg-violet-200', 'text-violet-800  bg-violet-200'],
-    teal: ['text-teal-300', 'text-teal-400', 'text-teal-600', 'text-teal-800']
-  }
-
   const bgColorVariants = {
-    yellow: ['bg-yellow-100', 'bg-yellow-200', 'bg-yellow-400', 'bg-yellow-800'],
-    green: ['bg-green-100', 'bg-green-200', 'bg-green-400', 'bg-green-800'],
-    blue: ['bg-blue-100', 'bg-blue-200', 'bg-blue-400', 'bg-blue-800'],
-    red: ['bg-red-100', 'bg-red-200', 'bg-red-400', 'bg-red-800'],
-    violet: ['bg-violet-100', 'bg-violet-200', 'bg-violet-400', 'bg-violet-800'],
-    teal: ['bg-teal-100', 'bg-teal-200', 'bg-teal-400', 'bg-teal-800']
-  }
+    yellow: [
+      "bg-yellow-100",
+      "bg-yellow-200",
+      "bg-yellow-400",
+      "bg-yellow-800",
+    ],
+    green: ["bg-green-100", "bg-green-200", "bg-green-400", "bg-green-800"],
+    blue: ["bg-blue-100", "bg-blue-200", "bg-blue-400", "bg-blue-800"],
+    red: ["bg-red-100", "bg-red-200", "bg-red-400", "bg-red-800"],
+    violet: [
+      "bg-violet-100",
+      "bg-violet-200",
+      "bg-violet-400",
+      "bg-violet-800",
+    ],
+    gray: ["bg-gray-100", "bg-gray-200", "bg-gray-400", "bg-gray-800"],
+    teal: ["bg-teal-100", "bg-teal-200", "bg-teal-400", "bg-teal-800"],
+  };
 
   const gradientColorVariants = {
     yellow: ["bg-gradient-to-r from-slate-400 from-[8%] via-yellow-200 via-45% to-yellow-500"],
