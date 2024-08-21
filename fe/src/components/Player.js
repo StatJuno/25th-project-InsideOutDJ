@@ -1,3 +1,4 @@
+// src/components/Player.js
 import React, { useState, useEffect } from "react";
 import tw from "tailwind-styled-components";
 import { useNavigate } from "react-router-dom";
