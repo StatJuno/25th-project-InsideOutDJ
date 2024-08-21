@@ -62,15 +62,15 @@ const Slider = styled.input`
     background: #FFF;
     box-shadow: ${(props) => props.boxShadow};
     border-radius: 50%;
-    z-index: 50;
+    z-index: 30;
   }
 `;
 const PlaylistBtn = tw.button`
-  z-30 fixed top-4 right-4 md:right-20 py-1 px-3 bg-gray-200 rounded-full text-sm border-1 shadow-lg transition ease-in-out hover:bg-green-100
+  z-40 fixed top-4 right-4 md:right-20 py-1 px-3 bg-gray-200 rounded-full text-sm border-1 shadow-lg transition ease-in-out hover:bg-green-100
 `;
 
 const DiaryBtn = tw.button`
-  z-30 fixed top-4 left-4 py-1 px-3 bg-gray-200 rounded-full text-sm border-1 shadow-lg transition ease-in-out hover:bg-yellow-100
+  z-40 fixed top-4 left-4 py-1 px-3 bg-gray-200 rounded-full text-sm border-1 shadow-lg transition ease-in-out hover:bg-yellow-100
 `;
 function Player({
   togglePlayPause,
@@ -241,10 +241,11 @@ function Player({
 
   return (
     
-    <div class="relative h-full">
+    <div class="overflow-x-hidden">
       <PlaylistBtn onClick={goToPlaylists}>기억저장소 가기</PlaylistBtn>
       <DiaryBtn onClick={goToDiary}>일기 쓰러 가기</DiaryBtn>
-      <button id="mainmenuicon_btn" className="z-30 m-4 absolute top-10 md:top-0 right-0" onClick={toggleSlideMenu}><img src={menu_icon} alt="Menu"/></button>
+      <button id="mainmenuicon_btn" className="z-40 m-4 fixed top-10 md:top-0 right-0" onClick={toggleSlideMenu}><img src={menu_icon} alt="Menu"/></button>
+      <div className="relative h-full">
       <div
         class="h-full absolute overflow-hidden bg-gray-900 top-0 right-0 m-0 fixed z-40 inset-y-0 border-r border-r-dashed border-r-neutral-200 fixed-start"
         id="menuslide-framer"
@@ -590,9 +591,9 @@ function Player({
         </section>
         <section>
           <span className="mt-4 mb-4">Made with ❤️ by InsideOutDJ. </span>
-          
         </section>
       </Wrapper>
+      </div>
     </div>
   );
 }
